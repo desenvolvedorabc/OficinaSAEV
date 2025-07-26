@@ -1,2 +1,303 @@
-# OficinaSAEV
-Oficina de IA com análise de dados usando o Copilot, Python e DuckDB (OLAP).
+# 📊 OficinaSAEV
+
+Oficina de IA com análise de dados usando o Copilot GitHub, Python e DuckDB (OLAP).
+
+
+## 📊 SAEV Dashboard - Sistema de Análise de Avaliações Educacionais
+
+Este projeto desenvolve uma solução completa de Business Intelligence para análise de dados de avaliações diagnósticas aplicadas em escolas da rede municipal e estadual, utilizando tecnologias modernas e inteligência artificial.
+
+Esta oficina tem como objetivo orientar os técnicos e analistas de dados sobre como utilizar ferramentas livres integradas com a Inteligência Artifical para análise de dados e construção de aplicaçõe úteis para os parceiros e usuários do SAEV. 
+
+A principal fonte de dados deste projeto são os microdados do SAEV, que são fornecidos no formato CSV.
+
+
+## �🎯 Objetivos do Projeto
+
+- **Visualização Interativa**: Dashboards dinâmicos para análise de desempenho educacional
+- **Relatórios Automatizados**: Geração de relatórios detalhados em Excel ou PDF
+- **Análises Avançadas**: Clustering, análise de tendências e correlações
+- **Monitoramento de Equidade**: Identificação de gaps educacionais
+- **Interface Intuitiva**: Painel web responsivo e fácil de usar
+
+
+## 🚀 Funcionalidades Principais
+
+### 📈 Dashboard Interativo
+- Visão geral de desempenho por município e escola
+- Análise por competências e descritores
+- Filtros dinâmicos por ano, disciplina, teste e série
+- Gráficos interativos com Plotly
+
+### 📋 Sistema de Relatórios
+- Relatórios municipais comparativos
+- Análise de desempenho por escola
+- Relatórios de competências e descritores
+- Análises comparativas entre anos
+- Exportação automática para Excel
+
+### 🔬 Análises Avançadas
+- Clustering de escolas por perfil de desempenho
+- Análise de equidade educacional
+- Correlação entre competências
+- Análise de tendências temporais
+- Identificação de gaps entre séries
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Python 3.8+**: Linguagem principal
+- **Streamlit**: Framework para dashboard web
+- **Plotly**: Visualizações interativas
+- **Pandas**: Manipulação de dados
+- **DuckDB**: Banco de dados local (arquitetura OLAP)
+- **Scikit-learn**: Análises de machine learning
+- **SciPy**: Análises estatísticas
+
+## 📁 Estrutura de diretórios sugerida para o Projeto
+
+```
+oficinaIA/
+├── README.md
+├── data/
+│   ├── raw/                      # Dados CSV originais
+│   └── test/                     # Dados de teste
+├── db/
+│   ├── avaliacao_teste.duckdb    # Banco de teste (pode estar no repo)
+│   └── avaliacao_prod.duckdb     # Banco de produção (não vai pro repo)
+├── src/
+│   ├── config.py                 # Configurações e gerenciamento de ambientes
+│   ├── data/
+│   │   ├── etl.py               # Processos de ETL integrados com Star Schema
+│   │   └── star_schema.py       # Utilitários Python para Star Schema
+│   ├── dashboard/
+│   │   └── main.py              # Dashboard principal
+│   ├── reports/
+│   │   └── generator.py         # Gerador de relatórios
+│   └── analytics/
+│       └── advanced.py          # Análises estatísticas avançadas
+├── reports/                      # Relatórios gerados
+└── tests/                        # Testes unitários
+```
+
+### Tabela "avaliacao"
+
+A tabela a ser carregada no banco de dados DuckDB de nome "avaliacao" deve conter a estrutura a seguir:
+
+
+| Nome da Coluna  | Tipo de Dados  | Tamanho | Descrição |  
+| ----------------| -------------- | ------- | --------- |
+| MUN_UF          | CHAR(2)        |    2    | SIGLA DA UNIDADE DA FEDERAÇÃO |       
+| MUN_NOME        | VARCHAR(60)    |   60    | NOME DO MUNICÍPIO |
+| ESC_INEP        | CHAR(8)        |    8    | CÓDIGO INEP DA ESCOLA |
+| ESC_NOME        | VARCHAR(80)    |   80    | NOME DA ESCOLA |
+| SER_NUMBER      | INTEGER        |         | NÚMERO DO ANO/SÉRIE |
+| SER_NOME        | VARCHAR(30)    |   30    | NOME DA SÉRIE |
+| TUR_PERIODO     | VARCHAR(15)    |   15    | TURNO DE ATIVIDADE (Manhã, Tarde) |
+| TUR_NOME        | VARCHAR(15)    |   20    | NOME DO TURNO |
+| ALU_ID          | LONG           |         | IDENTIFICAÇÃO DO ALUNO |  
+| ALU_NOME        | VARCHAR(80)    |   80    | NOME DO ALUNO |
+| ALU_CPF         | VARCHAR(11)    |   15    | CPF DO ALUNO  |
+| AVA_NOME        | VARCHAR(50)    |   50    | NOME DA AVALIAÇÃO |  
+| AVA_ANO         | INTEGER        |         | ANO DA AVALIAÇÃO |
+| DIS_NOME        | VARCHAR(30)    |   30    | NOME DA DISCIPLINA  |
+| TES_NOME        | VARCHAR(30)    |   30    | NOME DO TESTE |
+| TEG_ORDEM       | INTEGER        |         | ORDEM DA QUESTÃO DO TESTE |
+| ATR_RESPOSTA    | CHAR(1)        |    1    | RESPOSTA DO ALUNO NA QUESTÃO |
+| ATR_CERTO       | INTEGER        |         | SE 1 ACERTOU SE 0 ERROU |   
+| MTI_CODIGO      | VARCHAR(15)    |   15    | CÓDIGO DO DESCRITOR |
+| MTI_DESCRITOR   | VARCHAR(512)   |   512   | DESCRIÇÃO DO DESCRITOR | 
+
+
+####  DDL para criação da tabela
+
+A seguir tem-se o comando DDL para criação da tabela no DunckDB. Tanto o banco de dados como a tabela "avaliacao" devem ser criados caso não existam. 
+
+```sql
+CREATE TABLE avaliacao (
+    MUN_UF         CHAR(2),              -- SIGLA DA UNIDADE DA FEDERAÇÃO
+    MUN_NOME       VARCHAR(60),          -- NOME DO MUNICÍPIO
+    ESC_INEP       CHAR(8),              -- CÓDIGO INEP DA ESCOLA
+    ESC_NOME       VARCHAR(80),          -- NOME DA ESCOLA
+    SER_NUMBER     INTEGER,              -- NÚMERO DO ANO/SÉRIE
+    SER_NOME       VARCHAR(30),          -- NOME DA SÉRIE
+    TUR_PERIODO    VARCHAR(15),          -- TURNO DE ATIVIDADE (Manhã, Tarde)
+    TUR_NOME       VARCHAR(20),          -- NOME DO TURNO
+    ALU_ID         INTEGER,              -- IDENTIFICAÇÃO DO ALUNO
+    ALU_NOME       VARCHAR(80),          -- NOME DO ALUNO
+    ALU_CPF        VARCHAR(15),          -- CPF DO ALUNO
+    AVA_NOME       VARCHAR(50),          -- NOME DA AVALIAÇÃO
+    AVA_ANO        INTEGER,              -- ANO DA AVALIAÇÃO
+    DIS_NOME       VARCHAR(30),          -- NOME DA DISCIPLINA
+    TES_NOME       VARCHAR(30),          -- NOME DO TESTE
+    TEG_ORDEM      INTEGER,              -- ORDEM DA QUESTÃO DO TESTE
+    ATR_RESPOSTA   CHAR(1),              -- RESPOSTA DO ALUNO NA QUESTÃO
+    ATR_CERTO      INTEGER,              -- SE 1 ACERTOU, SE 0 ERROU
+    MTI_CODIGO     VARCHAR(15),          -- CÓDIGO DO DESCRITOR
+    MTI_DESCRITOR  VARCHAR(512)          -- DESCRIÇÃO DO DESCRITOR
+);
+
+## ⭐ Arquitetura Star Schema
+
+Para análises de alta performance e Business Intelligence, o sistema deve oferecer uma  estrutura monolítica em um modelo Star Schema otimizado.
+Isto é, além de permitir consultas eventuais na tabela primária "avaliação" deverá criar um estrutura Star Schema como apresentada a seguir.
+
+### 🏗️ Estrutura do Star Schema
+
+#### 📋 Tabelas de Dimensão
+
+| **Tabela** | **Propósito** | **Chave Primária** | **Descrição** |
+|------------|---------------|-------------------|---------------|
+| **`dim_aluno`** | Dimensão de Alunos | `ALU_ID` | Dados únicos de cada aluno (ID, nome, CPF) |
+| **`dim_escola`** | Dimensão de Escolas | `ESC_INEP` | Dados únicos de cada escola (código INEP, nome) |
+| **`dim_descritor`** | Dimensão de Descritores | `MTI_CODIGO` | Competências/descritores com estatísticas de uso |
+
+#### ⭐ Tabela Fato
+
+| **Tabela** | **Propósito** | **Métricas** |
+|------------|---------------|--------------|
+| **`fato_resposta_aluno`** | Fatos agregados por aluno e descritor | `ACERTO`, `ERRO` |
+
+#### 🔧 Tabela Auxiliar
+
+| **Tabela** | **Propósito** | **Descrição** |
+|------------|---------------|---------------|
+| **`teste`** | Versão normalizada | Dados da tabela original sem redundâncias das dimensões |
+
+### 📊 Diagrama do Star Schema
+
+```
+                    ┌─────────────────┐
+                    │   dim_aluno     │
+                    │                 │
+                    │ • ALU_ID (PK)   │
+                    │ • ALU_NOME      │
+                    │ • ALU_CPF       │
+                    └─────────┬───────┘
+                              │
+                              │
+        ┌─────────────────┐   │   ┌──────────────────┐
+        │   dim_escola    │   │   │  dim_descritor   │
+        │                 │   │   │                  │
+        │ • ESC_INEP (PK) │   │   │ • MTI_CODIGO(PK) │
+        │ • ESC_NOME      │   │   │ • MTI_DESCRITOR  │
+        └─────────┬───────┘   │   │ • QTD            │
+                  │           │   └─────────┬────────┘
+                  │           │             │
+                  └───────────┼─────────────┘
+                              │
+                    ┌─────────▼───────┐
+                    │fato_resposta_   │
+                    │     aluno       │
+                    │                 │
+                    │ • ALU_ID (FK)   │
+                    │ • ESC_INEP (FK) │
+                    │ • MTI_CODIGO(FK)│
+                    │ • MUN_NOME      │
+                    │ • SER_NOME      │
+                    │ • DIS_NOME      │
+                    │ • TES_NOME      │
+                    │ • ACERTO ⭐     │
+                    │ • ERRO ⭐       │
+                    └─────────────────┘
+```
+
+#### Criação da Estrutura Star Schema com base na tabela "avaliacao"
+
+```sql
+DROP TABLE IF EXISTS dim_aluno;
+DROP TABLE IF EXISTS dim_escola; 
+DROP TABLE IF EXISTS dim_descritor;
+DROP TABLE IF EXISTS teste; 
+DROP TABLE IF EXISTS fato_resposta_aluno;
+
+-- Popula a dimensão com alunos únicos
+
+CREATE TABLE dim_aluno (
+    ALU_ID INTEGER PRIMARY KEY,    -- Chave primária - ID único do aluno
+    ALU_NOME VARCHAR(60),          -- Nome do aluno (pode estar criptografado)
+    ALU_CPF CHAR(11)               -- CPF do aluno (pode estar criptografado)
+);
+
+INSERT INTO dim_aluno (ALU_ID, ALU_NOME, ALU_CPF)  
+SELECT DISTINCT ALU_ID, ALU_NOME, ALU_CPF 
+FROM avaliacao;
+
+select count(*) from dim_aluno;
+
+CREATE TABLE dim_escola (
+    ESC_INEP CHAR(8) PRIMARY KEY,  -- Chave primária - Código INEP da escola
+    ESC_NOME VARCHAR(60)           -- Nome da escola (pode estar criptografado)
+);
+
+-- Popula a dimensão com escolas únicas
+INSERT INTO dim_escola (ESC_INEP, ESC_NOME) 
+SELECT DISTINCT ESC_INEP, ESC_NOME 
+FROM avaliacao;
+SELECT COUNT(*) FROM dim_escola;
+
+-- Popula a dimensão com descritores únicos e suas estatísticas
+-- Usa MAX() para pegar uma versão da descrição quando há variações
+INSERT INTO dim_descritor (MTI_CODIGO, MTI_DESCRITOR, QTD) 
+SELECT 
+    MTI_CODIGO, 
+    MAX(MTI_DESCRITOR) AS MTI_DESCRITOR,  -- Pega uma versão da descrição
+    COUNT(*) AS QTD 
+FROM avaliacao 
+GROUP BY MTI_CODIGO;
+
+SELECT COUNT(*) FROM dim_descritor;
+
+-- ----------------------------------------------------------------------------
+-- TABELA FATO: fato_resposta_aluno
+-- Agregação por aluno, descritor e contexto, com métricas de acerto/erro
+-- É o coração do Star Schema - onde ficam as métricas de negócio
+-- ----------------------------------------------------------------------------
+CREATE TABLE fato_resposta_aluno AS 
+SELECT 
+    -- Dimensões geográficas e administrativas
+    MUN_UF,           -- Unidade da Federação
+    MUN_NOME,         -- Nome do Município
+    ESC_INEP,         -- Código da Escola (FK para dim_escola)
+    
+    -- Dimensões educacionais
+    SER_NUMBER,       -- Número da Série
+    SER_NOME,         -- Nome da Série
+    TUR_PERIODO,      -- Período do Turno
+    TUR_NOME,         -- Nome do Turno
+    
+    -- Dimensão do aluno
+    ALU_ID,           -- ID do Aluno (FK para dim_aluno)
+    
+    -- Dimensões de avaliação
+    AVA_NOME,         -- Nome da Avaliação
+    AVA_ANO,          -- Ano da Avaliação
+    DIS_NOME,         -- Disciplina
+    TES_NOME,         -- Nome do Teste
+    MTI_CODIGO,       -- Código do Descritor (FK para dim_descritor)
+    
+    -- MÉTRICAS DE NEGÓCIO (Fatos)
+    SUM(CASE WHEN ATR_CERTO = 1 THEN 1 ELSE 0 END) AS ACERTO,  -- Total de acertos
+    SUM(CASE WHEN ATR_CERTO = 0 THEN 1 ELSE 0 END) AS ERRO     -- Total de erros
+FROM avaliacao
+GROUP BY 
+    MUN_UF, MUN_NOME, ESC_INEP, SER_NUMBER, SER_NOME, 
+    TUR_PERIODO, TUR_NOME, ALU_ID, AVA_NOME, AVA_ANO, 
+    DIS_NOME, TES_NOME, MTI_CODIGO;
+
+SELECT COUNT(*) FROM fato_resposta_aluno;
+
+```
+
+## ETL - Extração de Carga de Dados
+
+Os arquivos no formato CSV estão armazenados no diretório data/raw do projeto. Todos os arquivos armazenados neste diretório  têm a mesma estrutura e devem popular a tabela "avaliacao".
+O processo de carga deve permitir a opção completa ou incremental. Na versão incremental, somente arquivos novos devem ser carregados. Na versão completa, o banco de dawdos deve ser recriado (sobrestrico) e todos os arquivos do diretório devem ser carregados para o novo banco de dados. A estrutiura CSV está explicada a seguir.
+
+### estrutura CSV
+
+1) primeira linha contém os nomes dos campos (colunas): "MUN_UF","MUN_NOME","ESC_INEP","ESC_NOME","SER_NUMBER","SER_NOME","TUR_PERIODO","TUR_NOME","ALU_ID","ALU_NOME","ALU_CPF","AVA_NOME","AVA_ANO","DIS_NOME","TES_NOME","TEG_ORDEM","ATR_RESPOSTA","ATR_CERTO","MTI_CODIGO","MTI_DESCRITOR");
+2) O separador de coluna utilizado é a ","; 
+3) o delimitador de campos texto é o caractere  "aspas duplas" ("); Contudo, alguns campos texto no arquivo csv não possuem este delimitador (isso não é um problema para o ETL).
+
+
+
