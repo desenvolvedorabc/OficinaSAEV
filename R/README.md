@@ -172,20 +172,60 @@ install.packages(c("DBI", "duckdb", "dplyr", "ggplot2"))
 - Use máquina com mais RAM (recomendado: 8GB+)
 - Feche outros programas durante a execução
 
+## 🎯 Painéis de Análises (NOVO!)
+
+Agora o sistema inclui **painéis interativos** para visualização das análises:
+
+### 📊 Scripts de Painel Disponíveis
+
+1. **`painel_analises.R`** - Gera gráficos estáticos em PNG
+   ```bash
+   Rscript R/painel_analises.R
+   ```
+   - 7 análises com gráficos de alta qualidade
+   - Saída: `R/painel_graficos/*.png`
+
+2. **`painel_interativo.R`** - Cria dashboard HTML interativo
+   ```bash
+   Rscript R/painel_interativo.R
+   ```
+   - Interface web responsiva com KPIs visuais
+   - Saída: `R/painel_html/painel_saev_dashboard.html`
+
+### 📈 Análises dos Painéis
+
+- **Taxa de Acerto por Disciplina:** Matemática (61.02%) vs Língua Portuguesa (62.99%)
+- **Top 20 Municípios:** Alegre (77.90%), Pancas (77.80%), Brejetuba (77.02%)
+- **Top 20 Escolas:** EMPEF BREJO GRANDE DO SUL (97.63%)
+- **Heatmap Disciplina vs Série:** Visualização da progressão do aprendizado
+- **Distribuição por Turno:** Integral (63.24%), Tarde (63.22%), Manhã (60.69%)
+
+### 🎨 Recursos dos Painéis
+
+- **KPIs Visuais:** 313,573 alunos, 1,481 escolas, 78 municípios
+- **Classificação por Cores:** Verde (≥70%), Amarelo (50-69%), Vermelho (<50%)
+- **Exportação CSV:** Todos os dados disponíveis para análises adicionais
+- **Layout Responsivo:** Otimizado para desktop e mobile
+
+**📋 Documentação Completa:** Veja `R/README_PAINEIS.md` para detalhes completos
+
 ## 🎯 Próximos Passos
 
-1. **Análises Avançadas**: Clustering, análise de variância
-2. **Relatórios Automatizados**: RMarkdown para relatórios PDF
-3. **Dashboard Interativo**: Shiny para visualizações web
-4. **Modelagem Preditiva**: Machine learning para predição de desempenho
+- **Análises Temporais:** Comparação de dados ao longo do tempo
+- **Análises Preditivas:** Modelos de machine learning para identificar fatores de sucesso
+- **Drill-down Interativo:** Navegação detalhada por escola e aluno
+- **Alertas Automáticos:** Sistema de notificação para escolas com baixa performance
+- **Relatórios Automatizados:** Geração periódica de dashboards
 
 ## 📞 Suporte
 
-Para dúvidas sobre as análises em R:
-1. Verifique se o banco DuckDB existe e está populado
-2. Confirme que o R está instalado corretamente
-3. Execute o script passo a passo para identificar erros
-4. Consulte a documentação dos pacotes R utilizados
+Para dúvidas ou problemas com as análises em R:
+
+1. **Verificar Pré-requisitos:** Confirmar que o banco DuckDB está disponível
+2. **Logs de Execução:** Verificar mensagens de erro nos scripts
+3. **Pacotes R:** Confirmar instalação dos pacotes necessários (DBI, duckdb, dplyr, ggplot2)
+4. **Dados:** Verificar se o ETL foi executado com sucesso
+5. **Painéis:** Para problemas específicos com dashboards, consulte `R/README_PAINEIS.md`
 
 ---
 
