@@ -1,0 +1,60 @@
+{
+  "processed_files": {
+    "es_6_serie.csv": {
+      "hash": "f8ffc83cddea070b9b691b25068715a9",
+      "processed_at": "2025-07-26T21:57:06.700720",
+      "file_size": 853168581
+    },
+    "es_7_serie.csv": {
+      "hash": "74d840e08b8a75b3d308675a9e0c2275",
+      "processed_at": "2025-07-26T21:57:08.043222",
+      "file_size": 736920823
+    },
+    "es_1_serie.csv": {
+      "hash": "e879584a9d5fa400e2d671e36ac52d59",
+      "processed_at": "2025-07-26T21:57:09.206874",
+      "file_size": 649173908
+    },
+    "es_4_serie.csv": {
+      "hash": "1807cacb06d23866c47d251ba1b147a3",
+      "processed_at": "2025-07-26T21:57:11.086137",
+      "file_size": 1081663863
+    },
+    "es_9_serie.csv": {
+      "hash": "6871dec2dfad150f1db0a744527d298b",
+      "processed_at": "2025-07-26T21:57:12.274223",
+      "file_size": 664369297
+    },
+    "es_2_serie.csv": {
+      "hash": "ade4c9988ef96801c963c26078ff4a02",
+      "processed_at": "2025-07-26T21:57:14.121221",
+      "file_size": 1047860102
+    },
+    "es_5_serie.csv": {
+      "hash": "d7cacb5e49a96da5c7ed5fe4f51b7bcf",
+      "processed_at": "2025-07-26T21:57:16.052588",
+      "file_size": 1122449368
+    },
+    "es_8_serie.csv": {
+      "hash": "3e845f01e9246eb0759b9df03c70f7c3",
+      "processed_at": "2025-07-26T21:57:17.347634",
+      "file_size": 750776977
+    },
+    "es_3_serie.csv": {
+      "hash": "8cc96b7c9c32b375cd5b77c5ef71015e",
+      "processed_at": "2025-07-26T21:57:19.213450",
+      "file_size": 1087039418
+    },
+    "teste_incremental.csv": {
+      "hash": "bec28b573343cc1d5bac7923b913e58c",
+      "processed_at": "2025-07-26T21:57:06.701312",
+      "file_size": 30770
+    },
+    "novo_teste.csv": {
+      "hash": "1b48fa88780cf5ef53ddcad9f5bcb34e",
+      "processed_at": "2025-07-26T21:57:52.781492",
+      "file_size": 15854
+    }
+  },
+  "last_full_load": "2025-07-26T21:57:19.214067"
+}

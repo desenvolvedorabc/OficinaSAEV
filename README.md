@@ -332,8 +332,32 @@ SELECT COUNT(*) FROM fato_resposta_aluno;
 
 ## 📊 ETL - Extração e Carga de Dados
 
-Os arquivos no formato CSV estão armazenados no diretório data/raw do projeto. Todos os arquivos armazenados neste diretório têm a mesma estrutura e devem popular a tabela "avaliacao".
-O processo de carga deve permitir a opção completa ou incremental. Na versão incremental, somente arquivos novos devem ser carregados. Na versão completa, o banco de dados deve ser recriado (sobrescrito) e todos os arquivos do diretório devem ser carregados para o novo banco de dados. A estrutura CSV está explicada a seguir.
+O sistema ETL processa arquivos CSV com dados de avaliações educacionais e os carrega em um banco de dados DuckDB com arquitetura Star Schema.
+
+### 🚀 **Execução Rápida**
+
+```bash
+# Ativar ambiente virtual
+source venv_saev/bin/activate
+
+# Carga completa (primeira vez)
+python run_etl.py full
+
+# Carga incremental (apenas arquivos novos)
+python run_etl.py incremental
+```
+
+### 📖 **Documentação Completa**
+
+Para instruções detalhadas de execução, configuração e resolução de problemas, consulte o **[Guia de Execução do ETL](EXECUCAO_ETL.md)**.
+
+### 📋 **Especificações Técnicas**
+
+Os arquivos no formato CSV estão armazenados no diretório `data/raw` do projeto. Todos os arquivos armazenados neste diretório têm a mesma estrutura e devem popular a tabela "avaliacao".
+
+O processo de carga oferece duas opções:
+- **Carga Completa**: Recria o banco de dados e processa todos os arquivos
+- **Carga Incremental**: Processa apenas arquivos novos ou modificados (usando hash MD5)
 
 ### Estrutura CSV
 
