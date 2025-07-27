@@ -7,12 +7,12 @@ Oficina de IA com análise de dados usando o Copilot GitHub, Python e DuckDB (OL
 
 Este projeto desenvolve uma solução completa de Business Intelligence para análise de dados de avaliações diagnósticas aplicadas em escolas da rede municipal e estadual, utilizando tecnologias modernas e inteligência artificial.
 
-Esta oficina tem como objetivo orientar os técnicos e analistas de dados sobre como utilizar ferramentas livres integradas com a Inteligência Artifical para análise de dados e construção de aplicaçõe úteis para os parceiros e usuários do SAEV. 
+Esta oficina tem como objetivo orientar os técnicos e analistas de dados sobre como utilizar ferramentas livres integradas com a Inteligência Artificial para análise de dados e construção de aplicações úteis para os parceiros e usuários do SAEV. 
 
 A principal fonte de dados deste projeto são os microdados do SAEV, que são fornecidos no formato CSV.
 
 
-## �🎯 Objetivos do Projeto
+## 🎯 Objetivos do Projeto
 
 - **Visualização Interativa**: Dashboards dinâmicos para análise de desempenho educacional
 - **Relatórios Automatizados**: Geração de relatórios detalhados em Excel ou PDF
@@ -53,7 +53,52 @@ A principal fonte de dados deste projeto são os microdados do SAEV, que são fo
 - **Scikit-learn**: Análises de machine learning
 - **SciPy**: Análises estatísticas
 
-## 📁 Estrutura de diretórios sugerida para o Projeto
+## 🚀 Instalação e Configuração
+
+Para configurar o ambiente de desenvolvimento, consulte o **[Guia de Instalação](INSTALACAO.md)** que contém instruções detalhadas para:
+
+- 🍎 **macOS** - Script automatizado com Homebrew
+- 🐧 **Linux (Ubuntu/Debian)** - Script com dependências do sistema
+- 🪟 **Windows** - Script batch com verificações
+
+### Instalação Rápida
+
+```bash
+# macOS
+./setup_macos.sh
+
+# Linux (Ubuntu/Debian)  
+./setup_linux.sh
+
+# Windows
+setup_windows.bat
+```
+
+## 🔒 Segurança e Privacidade de Dados
+
+### ⚠️ **IMPORTANTE - Dados Sigilosos**
+
+Este projeto trabalha com **dados educacionais sensíveis** contendo:
+- CPF de alunos
+- Nomes pessoais  
+- Informações escolares confidenciais
+
+### 🛡️ **Medidas de Segurança Implementadas**
+
+1. **Exclusão do Git**: As pastas `data/` e `db/` estão no `.gitignore`
+2. **Isolamento**: Dados ficam apenas no ambiente local
+3. **Documentação**: READMEs explicativos sobre segurança
+4. **Configuração**: Ambientes separados (teste/produção)
+
+### 📋 **Boas Práticas**
+
+- ✅ Use dados anonimizados para desenvolvimento
+- ✅ Mantenha backups seguros dos dados reais
+- ✅ Configure adequadamente permissões de acesso
+- ❌ **NUNCA** commite dados com informações pessoais
+- ❌ **NUNCA** compartilhe dados reais em repositórios públicos
+
+## 📁 Estrutura de Diretórios Sugerida para o Projeto
 
 ```
 oficinaIA/
@@ -62,26 +107,15 @@ oficinaIA/
 │   ├── raw/                      # Dados CSV originais
 │   └── test/                     # Dados de teste
 ├── db/
-│   ├── avaliacao_teste.duckdb    # Banco de teste (pode estar no repo)
-│   └── avaliacao_prod.duckdb     # Banco de produção (não vai pro repo)
 ├── src/
 │   ├── config.py                 # Configurações e gerenciamento de ambientes
-│   ├── data/
-│   │   ├── etl.py               # Processos de ETL integrados com Star Schema
-│   │   └── star_schema.py       # Utilitários Python para Star Schema
-│   ├── dashboard/
-│   │   └── main.py              # Dashboard principal
-│   ├── reports/
-│   │   └── generator.py         # Gerador de relatórios
-│   └── analytics/
-│       └── advanced.py          # Análises estatísticas avançadas
 ├── reports/                      # Relatórios gerados
 └── tests/                        # Testes unitários
 ```
 
 ### Tabela "avaliacao"
 
-A tabela a ser carregada no banco de dados DuckDB de nome "avaliacao" deve conter a estrutura a seguir:
+A tabela a ser carregada no banco de dados DuckDB com o nome "avaliacao" deve conter a estrutura apresentada a seguir:
 
 
 | Nome da Coluna  | Tipo de Dados  | Tamanho | Descrição |  
@@ -108,9 +142,9 @@ A tabela a ser carregada no banco de dados DuckDB de nome "avaliacao" deve conte
 | MTI_DESCRITOR   | VARCHAR(512)   |   512   | DESCRIÇÃO DO DESCRITOR | 
 
 
-####  DDL para criação da tabela
+#### DDL para Criação da Tabela
 
-A seguir tem-se o comando DDL para criação da tabela no DunckDB. Tanto o banco de dados como a tabela "avaliacao" devem ser criados caso não existam. 
+A seguir tem-se o comando DDL para criação da tabela no DuckDB. Tanto o banco de dados quanto a tabela "avaliacao" devem ser criados caso não existam. 
 
 ```sql
 CREATE TABLE avaliacao (
@@ -138,8 +172,8 @@ CREATE TABLE avaliacao (
 
 ## ⭐ Arquitetura Star Schema
 
-Para análises de alta performance e Business Intelligence, o sistema deve oferecer uma  estrutura monolítica em um modelo Star Schema otimizado.
-Isto é, além de permitir consultas eventuais na tabela primária "avaliação" deverá criar um estrutura Star Schema como apresentada a seguir.
+Para análises de alta performance e Business Intelligence, o sistema deve oferecer uma estrutura monolítica em um modelo Star Schema otimizado.
+Isto é, além de permitir consultas eventuais na tabela primária "avaliacao", deverá criar uma estrutura Star Schema como apresentada a seguir.
 
 ### 🏗️ Estrutura do Star Schema
 
@@ -210,19 +244,20 @@ DROP TABLE IF EXISTS dim_descritor;
 DROP TABLE IF EXISTS teste; 
 DROP TABLE IF EXISTS fato_resposta_aluno;
 
--- Popula a dimensão com alunos únicos
-
+-- Cria a dimensão de alunos
 CREATE TABLE dim_aluno (
     ALU_ID INTEGER PRIMARY KEY,    -- Chave primária - ID único do aluno
     ALU_NOME VARCHAR(60),          -- Nome do aluno (pode estar criptografado)
     ALU_CPF CHAR(11)               -- CPF do aluno (pode estar criptografado)
 );
 
-INSERT INTO dim_aluno (ALU_ID, ALU_NOME, ALU_CPF)  
+-- Popula a dimensão com alunos únicosINSERT INTO dim_aluno (ALU_ID, ALU_NOME, ALU_CPF)  
 SELECT DISTINCT ALU_ID, ALU_NOME, ALU_CPF 
 FROM avaliacao;
 
-select count(*) from dim_aluno;
+SELECT COUNT(*) FROM dim_aluno;
+
+-- Cria a dimensão de escolas
 
 CREATE TABLE dim_escola (
     ESC_INEP CHAR(8) PRIMARY KEY,  -- Chave primária - Código INEP da escola
@@ -234,6 +269,13 @@ INSERT INTO dim_escola (ESC_INEP, ESC_NOME)
 SELECT DISTINCT ESC_INEP, ESC_NOME 
 FROM avaliacao;
 SELECT COUNT(*) FROM dim_escola;
+
+-- Cria tabela de dimensão de descritores com código, descrição e quantidade
+CREATE TABLE dim_descritor (
+    MTI_CODIGO VARCHAR(15) PRIMARY KEY,  -- Chave primária - Código do descritor
+    MTI_DESCRITOR VARCHAR(512),          -- Descrição do descritor
+    QTD INTEGER                          -- Quantidade de ocorrências
+);
 
 -- Popula a dimensão com descritores únicos e suas estatísticas
 -- Usa MAX() para pegar uma versão da descrição quando há variações
@@ -288,16 +330,16 @@ SELECT COUNT(*) FROM fato_resposta_aluno;
 
 ```
 
-## ETL - Extração de Carga de Dados
+## 📊 ETL - Extração e Carga de Dados
 
-Os arquivos no formato CSV estão armazenados no diretório data/raw do projeto. Todos os arquivos armazenados neste diretório  têm a mesma estrutura e devem popular a tabela "avaliacao".
-O processo de carga deve permitir a opção completa ou incremental. Na versão incremental, somente arquivos novos devem ser carregados. Na versão completa, o banco de dawdos deve ser recriado (sobrestrico) e todos os arquivos do diretório devem ser carregados para o novo banco de dados. A estrutiura CSV está explicada a seguir.
+Os arquivos no formato CSV estão armazenados no diretório data/raw do projeto. Todos os arquivos armazenados neste diretório têm a mesma estrutura e devem popular a tabela "avaliacao".
+O processo de carga deve permitir a opção completa ou incremental. Na versão incremental, somente arquivos novos devem ser carregados. Na versão completa, o banco de dados deve ser recriado (sobrescrito) e todos os arquivos do diretório devem ser carregados para o novo banco de dados. A estrutura CSV está explicada a seguir.
 
-### estrutura CSV
+### Estrutura CSV
 
-1) primeira linha contém os nomes dos campos (colunas): "MUN_UF","MUN_NOME","ESC_INEP","ESC_NOME","SER_NUMBER","SER_NOME","TUR_PERIODO","TUR_NOME","ALU_ID","ALU_NOME","ALU_CPF","AVA_NOME","AVA_ANO","DIS_NOME","TES_NOME","TEG_ORDEM","ATR_RESPOSTA","ATR_CERTO","MTI_CODIGO","MTI_DESCRITOR");
-2) O separador de coluna utilizado é a ","; 
-3) o delimitador de campos texto é o caractere  "aspas duplas" ("); Contudo, alguns campos texto no arquivo csv não possuem este delimitador (isso não é um problema para o ETL).
+1) A primeira linha contém os nomes dos campos (colunas): "MUN_UF","MUN_NOME","ESC_INEP","ESC_NOME","SER_NUMBER","SER_NOME","TUR_PERIODO","TUR_NOME","ALU_ID","ALU_NOME","ALU_CPF","AVA_NOME","AVA_ANO","DIS_NOME","TES_NOME","TEG_ORDEM","ATR_RESPOSTA","ATR_CERTO","MTI_CODIGO","MTI_DESCRITOR";
+2) O separador de coluna utilizado é a vírgula (","); 
+3) O delimitador de campos texto é o caractere aspas duplas ("); Contudo, alguns campos texto no arquivo CSV não possuem este delimitador (isso não é um problema para o ETL).
 
 
 
