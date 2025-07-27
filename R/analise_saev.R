@@ -59,7 +59,7 @@ cat("✅ Pacotes carregados com sucesso!\n\n")
 cat("🔌 Conectando ao banco DuckDB...\n")
 
 # Caminho do banco de dados
-db_path <- "../db/avaliacao_prod.duckdb"
+db_path <- "db/avaliacao_prod.duckdb"
 
 # Verificar se o banco existe
 if (!file.exists(db_path)) {

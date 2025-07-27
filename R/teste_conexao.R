@@ -10,8 +10,9 @@ library(DBI)
 library(duckdb)
 
 # Conectar ao banco
-cat("🔌 Testando conexão com DuckDB...\n")
-con <- dbConnect(duckdb::duckdb(), dbdir = "../db/avaliacao_prod.duckdb")
+cat("🔌 Conectando ao DuckDB...
+")
+con <- dbConnect(duckdb::duckdb(), dbdir = "db/avaliacao_prod.duckdb")
 
 # Testar consulta simples
 tabelas <- dbListTables(con)

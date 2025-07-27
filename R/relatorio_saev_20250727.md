@@ -2,7 +2,7 @@
 
 **Sistema de Análise de Avaliações Educacionais**
 
-📅 **Data de Geração:** 27/07/2025 às 12:25
+📅 **Data de Geração:** 27/07/2025 às 15:50
 🏛️ **Fonte:** Banco DuckDB - Star Schema
 ⚙️ **Gerado por:** Script R automatizado
 
@@ -137,8 +137,8 @@ O banco DuckDB contém as seguintes tabelas:
 | EEEFM José Corrente | Alegre | 36 | 89.07% |
 | EUMEF CABECEIRA DO CORREGO BOLIVIA | Governador Lindenberg | 16 | 88.76% |
 | EMUEIEF ALTO BATUTA | Baixo Guandu | 27 | 88.5% |
-| EEEFM ALARICO JOSE DE LIMA | Nova Venécia | 36 | 88.4% |
 | EMPEIEF CACHOEIRINHA | Rio Novo do Sul | 17 | 88.4% |
+| EEEFM ALARICO JOSE DE LIMA | Nova Venécia | 36 | 88.4% |
 | EMEF FAZENDA BOA VISTA | Pancas | 15 | 88.17% |
 | EMEIEF FAZENDA ALBERTO LITTIG | Laranja da Terra | 13 | 87.41% |
 | EEEFM JANUÁRIO RIBEIRO  | Pancas | 51 | 87.4% |
@@ -194,4 +194,4 @@ Os dados detalhados foram exportados nos seguintes arquivos CSV:
 
 ---
 
-*Relatório gerado automaticamente pelo Sistema SAEV em 27/07/2025 às 12:25*
+*Relatório gerado automaticamente pelo Sistema SAEV em 27/07/2025 às 15:50*

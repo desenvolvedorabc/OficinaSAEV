@@ -35,33 +35,26 @@ OficinaSAEV/
 
 ## 🚀 Execução das Análises
 
-### Método 1: Relatório Markdown (Recomendado)
+**IMPORTANTE:** Todos os scripts devem ser executados **a partir da pasta raiz** do projeto:
+
 ```bash
-# Navegar para o diretório do projeto
+# Navegar para a pasta raiz
 cd /caminho/para/OficinaSAEV
 
-# Gerar relatório completo em Markdown
-Rscript R/gerar_relatorio_simples.R
-
-# Arquivo gerado: R/relatorio_saev_YYYYMMDD.md
+# Executar scripts (PADRONIZADO)
+Rscript R/teste_conexao.R           # Teste de conexão
+Rscript R/analise_simples.R         # Análise básica
+Rscript R/analise_saev.R            # Análise completa com gráficos
+Rscript R/gerar_relatorio_simples.R # Relatório Markdown
+Rscript R/painel_analises.R         # Painel com gráficos
+Rscript R/painel_interativo.R       # Dashboard HTML
 ```
 
-### Método 2: Análise Interativa Simples
-```bash
-# Análise rápida no console
-Rscript R/analise_simples.R
-```
+### ⚠️ Mudança Importante
+Todos os caminhos foram padronizados para usar `"db/avaliacao_prod.duckdb"`. 
+**NÃO execute mais** os scripts de dentro da pasta `R/`.
 
-### Método 3: Análise Completa com Gráficos
-```bash
-# Análise completa (requer pacotes adicionais)
-Rscript R/analise_saev.R
-```
-
-### Método 4: RStudio
-1. Abra o RStudio
-2. Abra o arquivo desejado: `R/gerar_relatorio_simples.R`
-3. Execute o script completo (Ctrl+Shift+Enter)
+📋 **Ver detalhes:** `R/PADRONIZACAO_CAMINHOS.md`
 
 ## 📊 Análises Realizadas
 
