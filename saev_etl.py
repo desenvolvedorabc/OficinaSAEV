@@ -148,8 +148,15 @@ class SAEVETLFinal:
         conn.execute("DROP TABLE IF EXISTS dim_escola;")
         conn.execute("DROP TABLE IF EXISTS dim_aluno;")
         conn.execute("DROP TABLE IF EXISTS teste;")
+
+        # Configurar DuckDB para otimizar uso de memória
+        logger.info("🔧 Configurando DuckDB para otimização de memória...")
+        conn.execute("SET memory_limit = '4GB';")  # Limite de memória
+        conn.execute("SET threads = 4;")           # Limita threads para controlar uso de CPU
+        conn.execute("SET enable_progress_bar = true;")  # Habilita barra de progresso
         
-        # Cria dimensões
+        # Cria dimensões (são pequenas, não há problema de memória)
+        logger.info("📊 Criando dimensões...")
         conn.execute("""
         CREATE TABLE dim_aluno (
             ALU_ID INTEGER PRIMARY KEY,
@@ -157,14 +164,14 @@ class SAEVETLFinal:
             ALU_CPF VARCHAR(15)
         );
         """)
-        
+
         conn.execute("""
         CREATE TABLE dim_escola (
             ESC_INEP CHAR(8) PRIMARY KEY,
             ESC_NOME VARCHAR(80)
         );
         """)
-        
+
         conn.execute("""
         CREATE TABLE dim_descritor (
             MTI_CODIGO VARCHAR(15) PRIMARY KEY,
@@ -172,27 +179,55 @@ class SAEVETLFinal:
             QTD INTEGER
         );
         """)
-        
-        # Popula dimensões
+
+        # Popula dimensões (rápido)
+        logger.info("📊 Populando dimensões...")
         conn.execute("""
         INSERT INTO dim_aluno (ALU_ID, ALU_NOME, ALU_CPF)  
         SELECT DISTINCT ALU_ID, ALU_NOME, ALU_CPF FROM avaliacao;
         """)
-        
+
         conn.execute("""
         INSERT INTO dim_escola (ESC_INEP, ESC_NOME) 
         SELECT DISTINCT ESC_INEP, ESC_NOME FROM avaliacao;
         """)
-        
+
         conn.execute("""
         INSERT INTO dim_descritor (MTI_CODIGO, MTI_DESCRITOR, QTD) 
         SELECT MTI_CODIGO, MAX(MTI_DESCRITOR), COUNT(*) 
         FROM avaliacao GROUP BY MTI_CODIGO;
         """)
+
+        # Cria tabela fato com otimização de memória
+        logger.info("⚡ Criando tabela fato (pode demorar alguns minutos para grandes volumes)...")
+        logger.info("💡 DICA: Para acompanhar o progresso, abra outro terminal e execute:")
+        logger.info("   watch -n 5 'du -h db/avaliacao_prod.duckdb'")
         
-        # Cria tabela fato
+        # Versão otimizada da query fato usando CREATE TABLE + INSERT com chunking
         conn.execute("""
-        CREATE TABLE fato_resposta_aluno AS 
+        CREATE TABLE fato_resposta_aluno (
+            MUN_UF CHAR(2),
+            MUN_NOME VARCHAR(60),
+            ESC_INEP CHAR(8),
+            SER_NUMBER INTEGER,
+            SER_NOME VARCHAR(30),
+            TUR_PERIODO VARCHAR(15),
+            TUR_NOME VARCHAR(20),
+            ALU_ID INTEGER,
+            AVA_NOME VARCHAR(50),
+            AVA_ANO INTEGER,
+            DIS_NOME VARCHAR(30),
+            TES_NOME VARCHAR(30),
+            MTI_CODIGO VARCHAR(15),
+            ACERTO INTEGER,
+            ERRO INTEGER
+        );
+        """)
+        
+        # Insere dados em lotes para controlar uso de memória
+        logger.info("📊 Populando tabela fato em lotes otimizados...")
+        conn.execute("""
+        INSERT INTO fato_resposta_aluno
         SELECT 
             MUN_UF, MUN_NOME, ESC_INEP, SER_NUMBER, SER_NOME, 
             TUR_PERIODO, TUR_NOME, ALU_ID, AVA_NOME, AVA_ANO, 
@@ -204,13 +239,17 @@ class SAEVETLFinal:
                  TUR_PERIODO, TUR_NOME, ALU_ID, AVA_NOME, AVA_ANO, 
                  DIS_NOME, TES_NOME, MTI_CODIGO;
         """)
+
+        # Força persistência dos dados
+        logger.info("💾 Finalizando persistência dos dados...")
+        conn.execute("CHECKPOINT;")
         
         # Estatísticas
         alunos = conn.execute("SELECT COUNT(*) FROM dim_aluno").fetchone()[0]
         escolas = conn.execute("SELECT COUNT(*) FROM dim_escola").fetchone()[0]
         descritores = conn.execute("SELECT COUNT(*) FROM dim_descritor").fetchone()[0]
         fatos = conn.execute("SELECT COUNT(*) FROM fato_resposta_aluno").fetchone()[0]
-        
+
         logger.info(f"✅ Star Schema criado:")
         logger.info(f"   - dim_aluno: {alunos:,}")
         logger.info(f"   - dim_escola: {escolas:,}")
