@@ -50,6 +50,13 @@ fi
 print_message "Atualizando Homebrew..."
 brew update
 
+# Instalar dependências necessárias para compilação
+print_message "Instalando dependências de compilação..."
+brew install cmake
+brew install arrow
+brew install boost
+brew install llvm
+
 # Instalar Python 3.11 se não estiver instalado
 if ! command -v python3.11 &> /dev/null; then
     print_message "Instalando Python 3.11..."
@@ -82,9 +89,18 @@ source venv_saev/bin/activate
 
 # Atualizar pip
 print_message "Atualizando pip..."
-pip install --upgrade pip
+pip install --upgrade pip setuptools wheel
 
-# Instalar dependências
+# Configurar variáveis de ambiente para compilação do PyArrow
+export ARROW_HOME=$(brew --prefix arrow)
+export PARQUET_HOME=$(brew --prefix arrow)
+export CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH:$(brew --prefix arrow)
+
+# Instalar PyArrow separadamente com configurações específicas
+print_message "Instalando PyArrow (pode demorar alguns minutos)..."
+pip install --no-cache-dir --verbose pyarrow
+
+# Instalar dependências restantes
 print_message "Instalando dependências do projeto..."
 pip install -r requirements.txt
 
