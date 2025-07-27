@@ -178,3 +178,4 @@ Desktop.ini
 # Backup files
 *.bak
 *.backup
+etl_metadata.json
