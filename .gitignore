@@ -228,3 +228,13 @@ R/log_*.txt
 # Arquivos de cache do R
 R/.cache/
 R/cache/
+
+# === Streamlit ===
+# Configurações e cache do Streamlit
+.streamlit/
+.streamlit/secrets.toml
+streamlit_app.log
+
+# Cache do Streamlit
+*.streamlit_cache/
+__streamlit_cache__/
