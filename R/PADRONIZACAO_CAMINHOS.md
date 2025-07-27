@@ -23,10 +23,9 @@ Isso causava confusão sobre de onde executar cada script.
 
 ### Scripts que já estavam corretos:
 1. `R/analise_simples.R` ✅
-2. `R/gerar_relatorio_md.R` ✅
-3. `R/gerar_relatorio_simples.R` ✅
-4. `R/painel_analises.R` ✅
-5. `R/painel_interativo.R` ✅
+2. `R/gerar_relatorio_simples.R` ✅
+3. `R/painel_analises.R` ✅
+4. `R/painel_interativo.R` ✅
 
 ## 🚀 Como Executar os Scripts (PADRONIZADO)
 
@@ -122,11 +121,8 @@ Rscript R/analise_saev.R
 
 ### Relatórios:
 ```bash
-# Relatório simples em Markdown
+# Relatório em Markdown (recomendado)
 Rscript R/gerar_relatorio_simples.R
-
-# Relatório completo em Markdown
-Rscript R/gerar_relatorio_md.R
 ```
 
 ### Painéis e Dashboards:

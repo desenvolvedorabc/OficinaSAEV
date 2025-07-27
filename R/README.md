@@ -45,7 +45,7 @@ cd /caminho/para/OficinaSAEV
 Rscript R/teste_conexao.R           # Teste de conexão
 Rscript R/analise_simples.R         # Análise básica
 Rscript R/analise_saev.R            # Análise completa com gráficos
-Rscript R/gerar_relatorio_simples.R # Relatório Markdown
+Rscript R/gerar_relatorio_simples.R # Relatório Markdown (recomendado)
 Rscript R/painel_analises.R         # Painel com gráficos
 Rscript R/painel_interativo.R       # Dashboard HTML
 ```
