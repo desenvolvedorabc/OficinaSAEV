@@ -7,6 +7,9 @@
 # 📦 INSTALAÇÃO E CARREGAMENTO DE PACOTES
 # ============================================================================
 
+# Configurar mirror CRAN
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
 # Função para instalar pacotes se necessário
 install_if_missing <- function(packages) {
   new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
