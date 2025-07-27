@@ -49,7 +49,7 @@ python -m pip install --upgrade pip setuptools wheel
 
 REM Instalar dependências
 echo [INFO] Instalando dependências do projeto...
-pip install -r requirements.txt
+pip install -r .\requirements.txt
 
 REM Criar estrutura de diretórios necessários (dados sigilosos não versionados)
 echo [INFO] Criando estrutura de diretórios para dados sigilosos...
