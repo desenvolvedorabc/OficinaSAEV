@@ -179,3 +179,52 @@ Desktop.ini
 *.bak
 *.backup
 etl_metadata.json
+
+# =============================================================================
+# ARTEFATOS GERADOS PELOS SCRIPTS R - NÃO VERSIONAR
+# =============================================================================
+
+# Relatórios Markdown gerados pelos scripts R
+R/relatorio_*.md
+R/*_relatorio_*.md
+
+# Gráficos e visualizações geradas
+R/painel_graficos/
+R/graficos/
+R/*.png
+R/*.jpg
+R/*.jpeg
+R/*.pdf
+R/*.svg
+
+# Dashboards HTML gerados
+R/painel_html/
+R/dashboard/
+R/*.html
+
+# Dados CSV exportados pelos scripts R
+R/painel_dados/
+R/dados_*.csv
+R/resultado_*.csv
+R/painel_*.csv
+R/relatorio_*.csv
+R/analise_*.csv
+
+# Arquivos temporários do R
+R/.Rhistory
+R/.RData
+R/.Ruserdata
+R/Rplots.pdf
+
+# Diretórios de saída gerados pelos painéis
+R/output/
+R/exports/
+R/generated/
+
+# Logs específicos dos scripts R
+R/*.log
+R/log_*.txt
+
+# Arquivos de cache do R
+R/.cache/
+R/cache/
