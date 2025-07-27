@@ -35,26 +35,33 @@ OficinaSAEV/
 
 ## 🚀 Execução das Análises
 
-### Método 1: Linha de Comando
+### Método 1: Relatório Markdown (Recomendado)
 ```bash
 # Navegar para o diretório do projeto
 cd /caminho/para/OficinaSAEV
 
-# Executar o script R
+# Gerar relatório completo em Markdown
+Rscript R/gerar_relatorio_simples.R
+
+# Arquivo gerado: R/relatorio_saev_YYYYMMDD.md
+```
+
+### Método 2: Análise Interativa Simples
+```bash
+# Análise rápida no console
+Rscript R/analise_simples.R
+```
+
+### Método 3: Análise Completa com Gráficos
+```bash
+# Análise completa (requer pacotes adicionais)
 Rscript R/analise_saev.R
 ```
 
-### Método 2: RStudio
+### Método 4: RStudio
 1. Abra o RStudio
-2. Abra o arquivo `R/analise_saev.R`
+2. Abra o arquivo desejado: `R/gerar_relatorio_simples.R`
 3. Execute o script completo (Ctrl+Shift+Enter)
-
-### Método 3: R Console
-```r
-# No console R
-setwd("/caminho/para/OficinaSAEV")
-source("R/analise_saev.R")
-```
 
 ## 📊 Análises Realizadas
 
@@ -88,7 +95,12 @@ source("R/analise_saev.R")
 
 ## 📁 Arquivos Gerados
 
-### Visualizações (PNG)
+### 📄 Relatórios
+- `relatorio_saev_YYYYMMDD.md` - Relatório completo em Markdown
+- Visualização: VS Code, Typora, GitHub, ou qualquer editor Markdown
+- Conversão para PDF: `pandoc relatorio_saev_YYYYMMDD.md -o relatorio.pdf`
+
+### 📊 Visualizações (PNG)
 - `grafico_alunos_por_serie.png` - Distribuição de alunos
 - `grafico_taxa_acerto_municipio.png` - Performance municipal
 - `grafico_heatmap_disciplina_serie.png` - Matriz de desempenho
@@ -96,7 +108,7 @@ source("R/analise_saev.R")
 - `grafico_evolucao_temporal.png` - Tendências anuais
 - `grafico_comparacao_turnos.png` - Análise de turnos
 
-### Dados Processados (CSV)
+### 💾 Dados Processados (CSV)
 - `dados_alunos_municipio_serie.csv` - Dataset de distribuição
 - `dados_taxa_acerto_municipio.csv` - Performance municipal
 - `dados_desempenho_disciplina_serie.csv` - Matriz disciplina/série
