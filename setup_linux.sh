@@ -44,12 +44,16 @@ fi
 print_message "Atualizando repositórios do sistema..."
 sudo apt update
 
+# Detectar versão do Python disponível
+PYTHON_VERSION=$(python3 --version | cut -d' ' -f2 | cut -d'.' -f1,2)
+print_message "Detectada versão do Python: $PYTHON_VERSION"
+
 # Instalar dependências do sistema
 print_message "Instalando dependências do sistema..."
 sudo apt install -y \
-    python3.11 \
-    python3.11-venv \
-    python3.11-dev \
+    python3 \
+    python3-venv \
+    python3-dev \
     python3-pip \
     git \
     curl \
@@ -72,7 +76,7 @@ fi
 
 # Criar ambiente virtual
 print_message "Criando ambiente virtual Python..."
-python3.11 -m venv venv_saev
+python3 -m venv venv_saev
 
 # Ativar ambiente virtual
 print_message "Ativando ambiente virtual..."
