@@ -12,7 +12,7 @@
     },
     "es_1_serie.csv": {
       "hash": "e879584a9d5fa400e2d671e36ac52d59",
-      "processed_at": "2025-07-26T22:36:53.155154",
+      "processed_at": "2025-07-27T09:56:54.964052",
       "file_size": 649173908
     },
     "es_4_serie.csv": {
@@ -27,7 +27,7 @@
     },
     "es_2_serie.csv": {
       "hash": "ade4c9988ef96801c963c26078ff4a02",
-      "processed_at": "2025-07-26T22:36:58.990262",
+      "processed_at": "2025-07-27T09:56:58.623734",
       "file_size": 1047860102
     },
     "es_5_serie.csv": {
@@ -56,5 +56,5 @@
       "file_size": 15854
     }
   },
-  "last_full_load": "2025-07-26T22:37:05.019111"
+  "last_full_load": "2025-07-27T09:56:58.663688"
 }

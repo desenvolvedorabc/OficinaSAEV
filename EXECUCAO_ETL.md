@@ -9,10 +9,13 @@ O ETL do SAEV processa arquivos CSV com dados de avaliações educacionais e car
 ## 📋 Pré-requisitos
 
 ### 1. Ambiente Virtual Ativo
-```bash
-# Ativar o ambiente virtual Python
-source venv_saev/bin/activate
+```powershell
+# Ativar o ambiente virtual Python (Windows PowerShell)
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned # (executar apenas uma vez, se necessário)
+./venv_saev/Scripts/Activate.ps1
 ```
+
+> **Observação:** Se aparecer erro de execução de script, execute o comando acima para liberar scripts no PowerShell. Em sistemas Linux/Mac, use `source venv_saev/bin/activate`.
 
 ### 2. Estrutura de Diretórios
 Certifique-se de que a seguinte estrutura existe:

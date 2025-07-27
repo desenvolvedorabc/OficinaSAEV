@@ -24,12 +24,14 @@ from typing import List, Dict, Optional, Tuple
 import logging
 
 # Configuração de logging
+console_handler = logging.StreamHandler(sys.stdout, encoding='utf-8')
+file_handler = logging.FileHandler('etl.log', encoding='utf-8')
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('etl.log'),
-        logging.StreamHandler()
+        file_handler,
+        console_handler
     ]
 )
 logger = logging.getLogger(__name__)
