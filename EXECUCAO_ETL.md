@@ -35,13 +35,41 @@ conda activate saev
 
 **Para instalação venv tradicional:**
 ```bash
-# Linux/macOS
+# Linux/macOS - Opção 1 (Recomendada)
 source venv_saev/bin/activate
+
+# Linux/macOS - Opção 2 (Se houver problemas)
+bash -c "source venv_saev/bin/activate && exec bash"
 
 # Windows PowerShell  
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned # (apenas uma vez)
 ./venv_saev/Scripts/Activate.ps1
+
+# Windows Command Prompt
+venv_saev\Scripts\activate.bat
 ```
+
+**🔧 Resolução de Problemas de Ativação:**
+
+Se o comando `source venv_saev/bin/activate` não funcionar:
+
+1. **Verificar se está no diretório correto:**
+   ```bash
+   pwd  # Deve estar em /caminho/para/OficinaSAEV
+   ls -la | grep venv_saev  # Deve mostrar o diretório
+   ```
+
+2. **Testar ativação alternativa:**
+   ```bash
+   # Método alternativo que sempre funciona
+   bash -c "source venv_saev/bin/activate && python --version && exec bash"
+   ```
+
+3. **Verificar se funcionou:**
+   ```bash
+   which python  # Deve apontar para venv_saev/bin/python
+   python --version  # Deve mostrar Python 3.13.x
+   ```
 
 ### 3. Estrutura de Diretórios
 Certifique-se de que a seguinte estrutura existe:
