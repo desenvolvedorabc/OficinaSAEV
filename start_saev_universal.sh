@@ -67,8 +67,11 @@ print_status "Diretório correto verificado"
 # 🔧 CORREÇÃO: Ativar ambiente conda antes de verificar dependências
 print_info "Ativando ambiente conda SAEV..."
 
-# Verificar se miniconda está instalado
-if [ -d "$HOME/miniconda" ]; then
+# Detectar e configurar ambiente Python
+print_info "Detectando ambiente Python..."
+
+# Verificar se miniconda está instalado e tem ambiente saev
+if [ -d "$HOME/miniconda" ] && [ -d "$HOME/miniconda/envs/saev" ]; then
     export PATH="$HOME/miniconda/bin:$PATH"
     
     # Inicializar conda se necessário
@@ -79,41 +82,26 @@ if [ -d "$HOME/miniconda" ]; then
     source "$HOME/miniconda/bin/activate" saev
     
     # Forçar o PATH para usar o Python do ambiente saev
-    export PATH="/Users/rcaratti/miniconda/envs/saev/bin:$PATH"
+    export PATH="$HOME/miniconda/envs/saev/bin:$PATH"
     
+    PYTHON_CMD="python"
     print_status "Ambiente conda 'saev' ativado"
-else
-    print_error "Miniconda não encontrado!"
-    print_warning "Execute: source ativar_ambiente.sh primeiro"
-    exit 1
-fi
-
-# Verificar se o banco de dados existe
-if [ ! -f "db/avaliacao_prod.duckdb" ]; then
-    print_error "Banco de dados não encontrado em: db/avaliacao_prod.duckdb"
-    print_warning "Execute o ETL primeiro: python run_etl.py full"
-    exit 1
-fi
-
-print_status "Banco de dados encontrado"
-
-# Detectar Python (usando ambiente conda)
-PYTHON_CMD=""
-
-# Verificar se estamos no ambiente conda
-if [[ "$CONDA_DEFAULT_ENV" == "saev" ]]; then
+    
+# Verificar se existe ambiente virtual venv_saev
+elif [ -d "venv_saev" ] && [ -f "venv_saev/bin/activate" ]; then
+    print_info "Ativando ambiente virtual venv_saev..."
+    source venv_saev/bin/activate
     PYTHON_CMD="python"
-    print_status "Usando Python do ambiente conda 'saev'"
+    print_status "Ambiente virtual 'venv_saev' ativado"
+    
+# Fallback para Python do sistema
 else
-    print_warning "Ambiente conda não ativo, tentando ativar..."
-    export PATH="$HOME/miniconda/bin:$PATH"
-    source "$HOME/miniconda/bin/activate" saev
-    PYTHON_CMD="python"
-fi
-
-# Fallback para detecção tradicional se conda falhar
-if [ -z "$PYTHON_CMD" ] || ! command -v $PYTHON_CMD &> /dev/null; then
-    if command -v python3 &> /dev/null; then
+    print_warning "Nenhum ambiente conda ou venv encontrado, usando Python do sistema..."
+    
+    # Detectar Python disponível
+    if command -v python3.11 &> /dev/null; then
+        PYTHON_CMD="python3.11"
+    elif command -v python3 &> /dev/null; then
         PYTHON_CMD="python3"
     elif command -v python &> /dev/null; then
         # Verificar se é Python 3
@@ -122,14 +110,30 @@ if [ -z "$PYTHON_CMD" ] || ! command -v $PYTHON_CMD &> /dev/null; then
             PYTHON_CMD="python"
         fi
     fi
+    
+    if [ -z "$PYTHON_CMD" ]; then
+        print_error "Python 3 não encontrado!"
+        print_warning "Instale Python 3 ou configure um ambiente virtual"
+        print_info "Para criar um ambiente virtual, execute:"
+        print_info "  python3 -m venv venv_saev"
+        print_info "  source venv_saev/bin/activate"
+        print_info "  pip install -r requirements.txt"
+        exit 1
+    else
+        print_status "Usando Python do sistema: $PYTHON_CMD"
+    fi
 fi
 
-if [ -z "$PYTHON_CMD" ]; then
-    print_error "Python 3 não encontrado!"
-    print_warning "Instale Python 3 ou adicione ao PATH"
+# Verificar se o banco de dados existe
+if [ ! -f "db/avaliacao_prod.duckdb" ]; then
+    print_error "Banco de dados não encontrado em: db/avaliacao_prod.duckdb"
+    print_warning "Execute o ETL primeiro: $PYTHON_CMD run_etl.py full"
     exit 1
 fi
 
+print_status "Banco de dados encontrado"
+
+# Verificar versão do Python
 PYTHON_VERSION=$($PYTHON_CMD --version 2>&1)
 print_status "Python encontrado: $PYTHON_VERSION"
 
