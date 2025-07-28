@@ -185,6 +185,29 @@ OficinaSAEV/
 
 ## 🆘 Solução de Problemas
 
+### ⚠️ Problema com PyArrow no macOS (Erro mais comum)
+
+Se encontrar erros relacionados ao **PyArrow**, **CMake**, **Thrift** ou **ArrowCompute**:
+
+```bash
+# Erro típico:
+# CMake Error: Could not find a package configuration file provided by "ArrowCompute"
+# ERROR: Failed building wheel for pyarrow
+```
+
+**🔧 Solução Rápida:**
+```bash
+# 1. Parar qualquer instalação em andamento (Ctrl+C)
+# 2. Limpar ambiente
+rm -rf venv_saev
+pip cache purge
+
+# 3. Usar script de correção específico
+./fix_pyarrow_macos.sh
+```
+
+**📋 Consulte também:** `SOLUCAO_PYARROW_MACOS.md` para soluções detalhadas.
+
 ### Erro: "Python não encontrado"
 - **Windows**: Reinstale Python marcando "Add Python to PATH"
 - **macOS**: Use `python3.11` em vez de `python`

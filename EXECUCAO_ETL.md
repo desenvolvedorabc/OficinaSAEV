@@ -8,16 +8,42 @@ O ETL do SAEV processa arquivos CSV com dados de avaliações educacionais e car
 
 ## 📋 Pré-requisitos
 
-### 1. Ambiente Virtual Ativo
-```powershell
-# Ativar o ambiente virtual Python (Windows PowerShell)
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned # (executar apenas uma vez, se necessário)
+### 1. Ambiente Configurado
+
+**⚠️ PRIMEIRO: Resolver problemas de instalação**
+
+Se você encontrou erros como:
+```
+CMake Error: Could not find ArrowCompute
+ERROR: Failed building wheel for pyarrow
+```
+
+**🔧 Solução rápida:**
+```bash
+./fix_pyarrow_macos.sh
+```
+
+**📖 Consulte:** `CORRECAO_RAPIDA_PYARROW.md` ou `SOLUCAO_PYARROW_MACOS.md`
+
+### 2. Ambiente Virtual Ativo
+
+**Para instalação conda (recomendada):**
+```bash
+# Ativar o ambiente conda
+conda activate saev
+```
+
+**Para instalação venv tradicional:**
+```bash
+# Linux/macOS
+source venv_saev/bin/activate
+
+# Windows PowerShell  
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned # (apenas uma vez)
 ./venv_saev/Scripts/Activate.ps1
 ```
 
-> **Observação:** Se aparecer erro de execução de script, execute o comando acima para liberar scripts no PowerShell. Em sistemas Linux/Mac, use `source venv_saev/bin/activate`.
-
-### 2. Estrutura de Diretórios
+### 3. Estrutura de Diretórios
 Certifique-se de que a seguinte estrutura existe:
 ```
 OficinaSAEV/
