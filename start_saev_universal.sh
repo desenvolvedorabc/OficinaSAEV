@@ -206,10 +206,11 @@ echo ""
 print_info "Escolha o aplicativo para executar:"
 echo "1) SAEV Streamlit 1 - Dashboard Geral (porta 8501)"
 echo "2) SAEV Streamlit 2 - Dashboard com Filtros (porta 8502)"
-echo "3) Ambos (portas 8501 e 8502)"
+echo "3) SAEV Rankings - Rankings e Classificações (porta 8503)"
+echo "4) Todos os aplicativos (portas 8501, 8502 e 8503)"
 echo ""
 
-read -p "Digite sua escolha (1, 2 ou 3): " choice
+read -p "Digite sua escolha (1, 2, 3 ou 4): " choice
 
 # Pergunta sobre abertura automática do navegador
 echo ""
@@ -233,45 +234,60 @@ case $choice in
         APP_NAME="SAEV Streamlit 2 - Dashboard com Filtros"
         ;;
     3)
-        print_info "Iniciando ambos aplicativos..."
+        APP_FILE="saev_rankings.py"
+        PORT=8503
+        APP_NAME="SAEV Rankings - Rankings e Classificações"
+        ;;
+    4)
+        print_info "Iniciando todos os aplicativos..."
         if [ -f "saev_streamlit.py" ]; then
-            print_info "Iniciando SAEV 1 em background (porta 8501)..."
+            print_info "Iniciando SAEV Dashboard Geral em background (porta 8501)..."
             nohup $PYTHON_CMD -m streamlit run saev_streamlit.py --server.port=8501 --server.headless=true > streamlit1.log 2>&1 &
             STREAMLIT1_PID=$!
             sleep 2
         fi
         if [ -f "saev_streamlit2.py" ]; then
-            print_info "Iniciando SAEV 2 em background (porta 8502)..."
+            print_info "Iniciando SAEV Dashboard com Filtros em background (porta 8502)..."
             nohup $PYTHON_CMD -m streamlit run saev_streamlit2.py --server.port=8502 --server.headless=true > streamlit2.log 2>&1 &
             STREAMLIT2_PID=$!
             sleep 2
         fi
+        if [ -f "saev_rankings.py" ]; then
+            print_info "Iniciando SAEV Rankings em background (porta 8503)..."
+            nohup $PYTHON_CMD -m streamlit run saev_rankings.py --server.port=8503 --server.headless=true > streamlit3.log 2>&1 &
+            STREAMLIT3_PID=$!
+            sleep 2
+        fi
         
         echo ""
-        print_status "Ambos aplicativos iniciados!"
+        print_status "Todos os aplicativos iniciados!"
         print_info "URLs disponíveis:"
-        print_info "  SAEV 1: http://localhost:8501"
-        print_info "  SAEV 2: http://localhost:8502"
+        print_info "  SAEV Dashboard Geral: http://localhost:8501"
+        print_info "  SAEV Dashboard Filtros: http://localhost:8502"
+        print_info "  SAEV Rankings: http://localhost:8503"
         if [ "$LOCAL_IP" != "localhost" ]; then
-            print_info "  SAEV 1 (rede): http://$LOCAL_IP:8501"
-            print_info "  SAEV 2 (rede): http://$LOCAL_IP:8502"
+            print_info "  SAEV Dashboard Geral (rede): http://$LOCAL_IP:8501"
+            print_info "  SAEV Dashboard Filtros (rede): http://$LOCAL_IP:8502"
+            print_info "  SAEV Rankings (rede): http://$LOCAL_IP:8503"
         fi
         print_info ""
         print_info "Para parar os aplicativos, execute: pkill -f streamlit"
-        print_info "Logs: streamlit1.log e streamlit2.log"
+        print_info "Logs: streamlit1.log, streamlit2.log e streamlit3.log"
         echo ""
         
         # Abrir navegadores se solicitado
         if [[ "$open_browser_choice" =~ ^[Yy]$ ]]; then
             print_info "🌐 Abrindo navegadores automaticamente..."
             (open_browser "http://localhost:8501" 3) &
-            (open_browser "http://localhost:8502" 5) &
+            (open_browser "http://localhost:8502" 6) &
+            (open_browser "http://localhost:8503" 9) &
             print_status "Navegadores sendo abertos em background"
         else
             print_info "🌐 Navegadores não serão abertos automaticamente"
             print_info "Acesse manualmente:"
-            print_info "  SAEV 1: http://localhost:8501"
-            print_info "  SAEV 2: http://localhost:8502"
+            print_info "  SAEV Dashboard Geral: http://localhost:8501"
+            print_info "  SAEV Dashboard Filtros: http://localhost:8502"
+            print_info "  SAEV Rankings: http://localhost:8503"
         fi
         
         print_warning "Para parar todos os serviços: pkill -f streamlit"

@@ -12,10 +12,12 @@ echo ================================================
 REM Verificar se estamos no diretório correto
 if not exist "saev_streamlit.py" (
     if not exist "saev_streamlit2.py" (
-        echo ❌ Erro: Execute este script na pasta raiz do projeto
-        echo    Arquivos esperados: saev_streamlit.py ou saev_streamlit2.py
-        pause
-        exit /b 1
+        if not exist "saev_rankings.py" (
+            echo ❌ Erro: Execute este script na pasta raiz do projeto
+            echo    Arquivos esperados: saev_streamlit.py, saev_streamlit2.py ou saev_rankings.py
+            pause
+            exit /b 1
+        )
     )
 )
 
@@ -100,11 +102,12 @@ echo ✅ Todas as dependencias verificadas
 REM Menu de seleção
 echo.
 echo 🎯 Escolha o aplicativo:
-echo 1) SAEV 1 - Dashboard Geral (porta 8501)
-echo 2) SAEV 2 - Dashboard com Filtros (porta 8502)
+echo 1) SAEV Dashboard Geral (porta 8501)
+echo 2) SAEV Dashboard com Filtros (porta 8502)
+echo 3) SAEV Rankings e Classificacoes (porta 8503)
 echo.
 
-set /p choice="Digite sua escolha (1 ou 2): "
+set /p choice="Digite sua escolha (1, 2 ou 3): "
 
 REM Pergunta sobre abertura do navegador
 echo.
@@ -119,11 +122,15 @@ if "%open_browser%"=="" set open_browser=y
 if "%choice%"=="1" (
     set APP_FILE=saev_streamlit.py
     set PORT=8501
-    set APP_NAME=SAEV 1 - Dashboard Geral
+    set APP_NAME=SAEV Dashboard Geral
 ) else if "%choice%"=="2" (
     set APP_FILE=saev_streamlit2.py
     set PORT=8502
-    set APP_NAME=SAEV 2 - Dashboard com Filtros
+    set APP_NAME=SAEV Dashboard com Filtros
+) else if "%choice%"=="3" (
+    set APP_FILE=saev_rankings.py
+    set PORT=8503
+    set APP_NAME=SAEV Rankings e Classificacoes
 ) else (
     echo ❌ Escolha invalida!
     pause

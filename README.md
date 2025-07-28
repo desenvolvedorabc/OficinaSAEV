@@ -1,15 +1,33 @@
 # 📊 OficinaSAEV
 
-Oficina de IA com análise de dados usando o Copilot GitHub, Python e DuckDB (OLAP).
+## � SAEV - Sistema de Avaliação Educacional com Rankings e Classificações
 
+Este projeto oferece uma suíte completa de dashboards interativos para análise dos dados do Sistema de Avaliação Educacional de Vitória (SAEV), incluindo funcionalidades avançadas de **rankings e classificações**.
 
-## 📊 SAEV Dashboard - Sistema de Análise de Avaliações Educacionais
+Esta oficina tem como objetivo orientar os técnicos e analistas sobre como utilizar ferramentas livres integradas com IA para análise de dados educacionais.
 
-Este projeto desenvolve uma solução completa de Business Intelligence para análise de dados de avaliações diagnósticas aplicadas em escolas da rede municipal e estadual, utilizando tecnologias modernas e inteligência artificial.
+---
 
-Esta oficina tem como objetivo orientar os técnicos e analistas de dados sobre como utilizar ferramentas livres integradas com a Inteligência Artificial para análise de dados e construção de aplicações úteis para os parceiros e usuários do SAEV. 
+## 🏆 **NOVA FUNCIONALIDADE: Rankings e Classificações**
 
-A principal fonte de dados deste projeto são os microdados do SAEV, que são fornecidos no formato CSV.
+### 🎯 **O que faz:**
+- **Top 50 Alunos**: Ranking dos melhores alunos por disciplina e teste específico
+- **Top 10 Escolas**: Ranking das melhores escolas por disciplina e teste
+- **Estatísticas Gerais**: Métricas completas de desempenho do teste selecionado
+- **Visualizações Interativas**: Gráficos dos top performers
+- **Download CSV**: Exportação completa dos rankings
+
+### 🔍 **Critérios de Ranking:**
+
+#### **👥 Ranking de Alunos:**
+- **Filtro mínimo:** 5 questões respondidas
+- **Ordenação:** Taxa de acerto (DESC) → Total de acertos (DESC)
+- **Dados exibidos:** Nome, escola, município, série, turno, performance
+
+#### **🏫 Ranking de Escolas:**
+- **Filtro mínimo:** 10 alunos e 100 questões respondidas
+- **Ordenação:** Taxa de acerto (DESC) → Total de alunos (DESC)
+- **Dados exibidos:** Nome, município, nº alunos, taxa, séries atendidas
 
 
 ## 🎯 Objetivos do Projeto
