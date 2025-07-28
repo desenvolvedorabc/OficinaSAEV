@@ -64,6 +64,30 @@ fi
 
 print_status "Diretório correto verificado"
 
+# 🔧 CORREÇÃO: Ativar ambiente conda antes de verificar dependências
+print_info "Ativando ambiente conda SAEV..."
+
+# Verificar se miniconda está instalado
+if [ -d "$HOME/miniconda" ]; then
+    export PATH="$HOME/miniconda/bin:$PATH"
+    
+    # Inicializar conda se necessário
+    if ! command -v conda &> /dev/null; then
+        source "$HOME/miniconda/etc/profile.d/conda.sh"
+    fi
+    
+    source "$HOME/miniconda/bin/activate" saev
+    
+    # Forçar o PATH para usar o Python do ambiente saev
+    export PATH="/Users/rcaratti/miniconda/envs/saev/bin:$PATH"
+    
+    print_status "Ambiente conda 'saev' ativado"
+else
+    print_error "Miniconda não encontrado!"
+    print_warning "Execute: source ativar_ambiente.sh primeiro"
+    exit 1
+fi
+
 # Verificar se o banco de dados existe
 if [ ! -f "db/avaliacao_prod.duckdb" ]; then
     print_error "Banco de dados não encontrado em: db/avaliacao_prod.duckdb"
@@ -73,15 +97,30 @@ fi
 
 print_status "Banco de dados encontrado"
 
-# Detectar Python (compatível com múltiplos sistemas)
+# Detectar Python (usando ambiente conda)
 PYTHON_CMD=""
-if command -v python3 &> /dev/null; then
-    PYTHON_CMD="python3"
-elif command -v python &> /dev/null; then
-    # Verificar se é Python 3
-    PYTHON_VERSION=$(python --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1)
-    if [ "$PYTHON_VERSION" = "3" ]; then
-        PYTHON_CMD="python"
+
+# Verificar se estamos no ambiente conda
+if [[ "$CONDA_DEFAULT_ENV" == "saev" ]]; then
+    PYTHON_CMD="python"
+    print_status "Usando Python do ambiente conda 'saev'"
+else
+    print_warning "Ambiente conda não ativo, tentando ativar..."
+    export PATH="$HOME/miniconda/bin:$PATH"
+    source "$HOME/miniconda/bin/activate" saev
+    PYTHON_CMD="python"
+fi
+
+# Fallback para detecção tradicional se conda falhar
+if [ -z "$PYTHON_CMD" ] || ! command -v $PYTHON_CMD &> /dev/null; then
+    if command -v python3 &> /dev/null; then
+        PYTHON_CMD="python3"
+    elif command -v python &> /dev/null; then
+        # Verificar se é Python 3
+        PYTHON_VERSION=$(python --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1)
+        if [ "$PYTHON_VERSION" = "3" ]; then
+            PYTHON_CMD="python"
+        fi
     fi
 fi
 

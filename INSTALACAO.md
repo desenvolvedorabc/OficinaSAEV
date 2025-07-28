@@ -1,5 +1,21 @@
 # 🚀 Guia de Instalação - OficinaSAEV
 
+## ⚠️ **ATENÇÃO: COMANDOS ATUALIZADOS**
+
+**❌ SE VOCÊ ESTÁ VENDO ERRO "venv_saev não encontrado":**
+```bash
+# NÃO use mais este comando:
+source venv_saev/bin/activate  # ← ESTE COMANDO NÃO FUNCIONA!
+```
+
+**✅ Use o comando correto:**
+```bash
+# COMANDO CORRETO:
+source ativar_ambiente.sh
+```
+
+---
+
 ## ✅ STATUS DA INSTALAÇÃO
 **INSTALAÇÃO COMPLETA**: Ambiente conda configurado com todas as dependências funcionando
 
@@ -133,16 +149,18 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 🔧 Verificação da Instalação
+### 🔧 Verificação da Instalação
 
 Após a instalação, verifique se tudo está funcionando:
 
 ```bash
-# Ativar ambiente virtual
-# macOS/Linux:
-source venv_saev/bin/activate
+# ✅ COMANDO ATUAL - Ativar ambiente conda
+source ativar_ambiente.sh
 
-# Windows:
+# ❌ COMANDO ANTIGO (NÃO funciona mais):
+# source venv_saev/bin/activate  # <- Este dará erro!
+
+# Windows (se aplicável):
 venv_saev\Scripts\activate.bat
 
 # Verificar instalação
@@ -153,21 +171,25 @@ python -c "import pandas, streamlit, duckdb, plotly; print('✅ Todas as depend�
 
 ### Dashboard Streamlit
 ```bash
-# Ativar ambiente virtual primeiro
-source venv_saev/bin/activate  # macOS/Linux
-# OU
-venv_saev\Scripts\activate.bat  # Windows
+# ✅ MÉTODO ATUAL - Ativar ambiente conda
+source ativar_ambiente.sh
 
-# Executar dashboard (quando disponível)
+# ❌ MÉTODO ANTIGO (não funciona):
+# source venv_saev/bin/activate  # macOS/Linux
+# venv_saev\Scripts\activate.bat  # Windows
+
+# Executar dashboard
 streamlit run src/dashboard/main.py
 ```
 
 ### Jupyter Notebook
 ```bash
-# Ativar ambiente virtual primeiro
-source venv_saev/bin/activate  # macOS/Linux
-# OU
-venv_saev\Scripts\activate.bat  # Windows
+# ✅ MÉTODO ATUAL - Ativar ambiente conda primeiro
+source ativar_ambiente.sh
+
+# ❌ MÉTODO ANTIGO (não funciona):
+# source venv_saev/bin/activate  # macOS/Linux
+# venv_saev\Scripts\activate.bat  # Windows
 
 # Iniciar Jupyter
 jupyter notebook
