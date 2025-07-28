@@ -40,8 +40,23 @@ export STREAMLIT_SERVER_PORT=8501
 export STREAMLIT_SERVER_HEADLESS=true
 export STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
-# Obter IP local (compatível com macOS)
-LOCAL_IP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | head -1 | awk '{print $2}')
+# Obter endereço IP local (compatível com múltiplos sistemas)
+LOCAL_IP="localhost"
+if command -v ifconfig &> /dev/null; then
+    # macOS e Linux com ifconfig
+    LOCAL_IP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk '{print $2}' | head -1)
+elif command -v ip &> /dev/null; then
+    # Linux moderno com ip command
+    LOCAL_IP=$(ip route get 1 | awk '{print $7; exit}' 2>/dev/null)
+elif command -v hostname &> /dev/null; then
+    # Fallback para sistemas com hostname
+    LOCAL_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+fi
+
+# Se não conseguiu obter IP, manter localhost
+if [ -z "$LOCAL_IP" ] || [ "$LOCAL_IP" = " " ]; then
+    LOCAL_IP="localhost"
+fi
 
 # Iniciar aplicativo
 echo "🌐 Iniciando servidor Streamlit..."

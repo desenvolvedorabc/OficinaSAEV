@@ -7,26 +7,14 @@
 echo "🚀 Iniciando SAEV Streamlit 2 - Dashboard com Filtros..."
 echo "================================================="
 
-# Verificar se estamos no diretório correto
-EXPECTED_DIR="/Users/rcaratti/Desktop/ABC/SAEV/OficinaSAEV"
-CURRENT_DIR=$(pwd)
-
-if [ "$CURRENT_DIR" != "$EXPECTED_DIR" ]; then
-    echo "⚠️  Mudando para o diretório correto..."
-    cd "$EXPECTED_DIR" || {
-        echo "❌ Erro: Não foi possível acessar o diretório $EXPECTED_DIR"
-        exit 1
-    }
+# Verificar se estamos no diretório correto do projeto
+if [ ! -f "saev_streamlit2.py" ]; then
+    echo "❌ Erro: Execute este script na pasta raiz do projeto OficinaSAEV"
+    echo "   O arquivo saev_streamlit2.py deve estar no diretório atual."
+    exit 1
 fi
 
 echo "📂 Diretório atual: $(pwd)"
-
-# Verificar se o arquivo do aplicativo existe
-if [ ! -f "saev_streamlit2.py" ]; then
-    echo "❌ Erro: Arquivo saev_streamlit2.py não encontrado!"
-    echo "   Certifique-se de que o arquivo está no diretório correto."
-    exit 1
-fi
 
 # Verificar se o banco de dados existe
 if [ ! -f "db/avaliacao_prod.duckdb" ]; then
@@ -67,10 +55,21 @@ for dep in "${dependencies[@]}"; do
     fi
 done
 
-# Obter endereço IP local (método compatível com macOS)
+# Obter endereço IP local (compatível com múltiplos sistemas)
+LOCAL_IP="localhost"
 if command -v ifconfig &> /dev/null; then
+    # macOS e Linux com ifconfig
     LOCAL_IP=$(ifconfig | grep "inet " | grep -v 127.0.0.1 | awk '{print $2}' | head -1)
-else
+elif command -v ip &> /dev/null; then
+    # Linux moderno com ip command
+    LOCAL_IP=$(ip route get 1 | awk '{print $7; exit}' 2>/dev/null)
+elif command -v hostname &> /dev/null; then
+    # Fallback para sistemas com hostname
+    LOCAL_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+fi
+
+# Se não conseguiu obter IP, manter localhost
+if [ -z "$LOCAL_IP" ] || [ "$LOCAL_IP" = " " ]; then
     LOCAL_IP="localhost"
 fi
 
