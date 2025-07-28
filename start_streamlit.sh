@@ -1,14 +1,14 @@
 #!/bin/bash
 
 # 🚀 Script de Inicialização do SAEV Streamlit
-# Executa o aplicativo web com todas as configurações otimizadas
+# Executa o aplicativo web simples e funcional
 
 echo "📊 SAEV - Sistema de Análise Educacional"
 echo "🚀 Iniciando aplicativo Streamlit..."
 echo "=========================================="
 
 # Verificar se estamos na pasta correta
-if [ ! -f "streamlit_app.py" ]; then
+if [ ! -f "saev_streamlit.py" ]; then
     echo "❌ Erro: Execute este script na pasta raiz do projeto OficinaSAEV"
     exit 1
 fi
@@ -55,7 +55,7 @@ echo ""
 echo "💡 Dica: Use Ctrl+C para parar o servidor"
 echo "=========================================="
 
-streamlit run streamlit_app.py \
+streamlit run saev_streamlit.py \
     --server.port=8501 \
     --server.headless=true \
     --browser.gatherUsageStats=false \
