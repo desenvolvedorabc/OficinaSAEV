@@ -3,7 +3,7 @@
 # 🚀 Script de Inicialização do SAEV Streamlit
 # Executa o aplicativo web simples e funcional
 
-echo "📊 SAEV - Sistema de Análise Educacional"
+echo "📊 SAEV - Oficinas de IA"
 echo "🚀 Iniciando aplicativo Streamlit..."
 echo "=========================================="
 

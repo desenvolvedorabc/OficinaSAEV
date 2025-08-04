@@ -1,5 +1,5 @@
 """
-📊 SAEV - Sistema de Análise Educacional do Espírito Santo
+📊 SAEV - Oficinas de IA do Espírito Santo
 🎯 Painel Principal de Dados
 
 Aplicativo Streamlit simples e funcional para visualização
@@ -139,7 +139,7 @@ def main():
     """Função principal do aplicativo"""
     
     # Cabeçalho
-    st.title("📊 SAEV - Sistema de Análise Educacional")
+    st.title("📊 SAEV - Oficinas de IA")
     st.subheader("🎯 Painel Principal de Dados")
     st.markdown("---")
     
@@ -337,7 +337,7 @@ def main():
     st.markdown("---")
     st.markdown(f"""
     <div style='text-align: center; color: #666; font-size: 12px;'>
-        📊 SAEV - Sistema de Análise Educacional do Espírito Santo<br>
+        📊 SAEV - Oficinas de IA do Espírito Santo<br>
         🎯 Painel Principal baseado no Star Schema<br>
         🕒 Última consulta: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}
     </div>

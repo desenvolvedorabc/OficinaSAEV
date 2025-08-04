@@ -1,5 +1,5 @@
 """
-📊 SAEV - Sistema de Análise Educacional do Espírito Santo
+📊 SAEV - Oficinas de IA do Espírito Santo
 🎯 Galeria de Painéis com Filtros Avançados
 
 Aplicativo Streamlit para visualização interativa dos dados SAEV
@@ -607,7 +607,7 @@ def main():
     """Função principal do aplicativo"""
     
     # Cabeçalho
-    st.title("📊 SAEV - Sistema de Análise Educacional")
+    st.title("📊 SAEV - Oficinas de IA")
     st.subheader("🎯 Galeria de Painéis com Filtros Avançados")
     st.markdown("---")
     
@@ -678,7 +678,7 @@ def main():
     st.markdown("---")
     st.markdown(f"""
     <div style='text-align: center; color: #666; font-size: 12px;'>
-        📊 SAEV - Sistema de Análise Educacional do Espírito Santo<br>
+        📊 SAEV - Oficinas de IA do Espírito Santo<br>
         🕒 Última atualização: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}<br>
         📈 Total de registros no banco: {len(df):,}
     </div>
