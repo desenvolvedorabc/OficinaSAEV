@@ -1,4 +1,11 @@
-# 📊 OficinaSAEV
+# # SAEV - Sistema de Análise Educacional
+
+## ⚠️ **TRATAMENTO ESPECIAL: DISCIPLINA LEITURA**
+
+📚 **IMPORTANTE**: A disciplina "Leitura" possui métricas baseadas em **proficiência** (níveis 1-6), não em acerto/erro.  
+� **Documentação completa**: Consulte `DISCIPLINA_LEITURA.md` para detalhes específicos.
+
+---📊 OficinaSAEV
 
 ## � SAEV - Sistema de Avaliação Educacional com Rankings e Classificações
 
@@ -154,8 +161,8 @@ A tabela a ser carregada no banco de dados DuckDB com o nome "avaliacao" deve co
 | DIS_NOME        | VARCHAR(30)    |   30    | NOME DA DISCIPLINA  |
 | TES_NOME        | VARCHAR(30)    |   30    | NOME DO TESTE |
 | TEG_ORDEM       | INTEGER        |         | ORDEM DA QUESTÃO DO TESTE |
-| ATR_RESPOSTA    | CHAR(1)        |    1    | RESPOSTA DO ALUNO NA QUESTÃO |
-| ATR_CERTO       | INTEGER        |         | SE 1 ACERTOU SE 0 ERROU |   
+| ATR_RESPOSTA    | VARCHAR(15)    |   15    | RESPOSTA DO ALUNO NA QUESTÃO (*) |
+| ATR_CERTO       | INTEGER        |         | SE 1 ACERTOU SE 0 ERROU (*) |   
 | MTI_CODIGO      | VARCHAR(15)    |   15    | CÓDIGO DO DESCRITOR |
 | MTI_DESCRITOR   | VARCHAR(512)   |   512   | DESCRIÇÃO DO DESCRITOR | 
 
@@ -182,11 +189,36 @@ CREATE TABLE avaliacao (
     DIS_NOME       VARCHAR(30),          -- NOME DA DISCIPLINA
     TES_NOME       VARCHAR(30),          -- NOME DO TESTE
     TEG_ORDEM      INTEGER,              -- ORDEM DA QUESTÃO DO TESTE
-    ATR_RESPOSTA   CHAR(1),              -- RESPOSTA DO ALUNO NA QUESTÃO
+    ATR_RESPOSTA   VARCHAR(15),          -- RESPOSTA DO ALUNO NA QUESTÃO
     ATR_CERTO      INTEGER,              -- SE 1 ACERTOU, SE 0 ERROU
     MTI_CODIGO     VARCHAR(15),          -- CÓDIGO DO DESCRITOR
     MTI_DESCRITOR  VARCHAR(512)          -- DESCRIÇÃO DO DESCRITOR
 );
+
+### ⚠️ **IMPORTANTE: Tratamento Especial para Disciplina "Leitura"**
+
+A disciplina **"Leitura"** tem características especiais:
+
+- **ATR_CERTO**: Sempre 0 (não aplicável)
+- **ATR_RESPOSTA**: Contém o nível de proficiência do aluno
+- **Métrica**: Baseada em níveis de leitura, não em acerto/erro
+
+#### 📚 **Níveis de Proficiência em Leitura:**
+
+| **Código** | **Descrição** | **Nível** |
+|------------|---------------|-----------|
+| `nao_leitor` | Não Leitor | 1 (Iniciante) |
+| `silabas` | Leitor de Sílabas | 2 |
+| `palavras` | Leitor de Palavras | 3 |
+| `frases` | Leitor de Frases | 4 |
+| `nao_fluente` | Não Fluente | 5 |
+| `fluente` | Leitor Fluente | 6 (Avançado) |
+
+#### 🎯 **Impacto nos Dashboards:**
+
+- **Análises tradicionais** (Português/Matemática): Baseadas em taxa de acerto
+- **Análises de Leitura**: Baseadas na distribuição de níveis de proficiência
+- **Métricas específicas**: Percentual de alunos por nível, evolução da proficiência
 
 ## ⭐ Arquitetura Star Schema
 

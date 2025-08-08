@@ -250,10 +250,11 @@ print_info "Escolha o aplicativo para executar:"
 echo "1) SAEV Streamlit 1 - Dashboard Geral (porta 8501)"
 echo "2) SAEV Streamlit 2 - Dashboard com Filtros (porta 8502)"
 echo "3) SAEV Rankings - Rankings e Classificações (porta 8503)"
-echo "4) Todos os aplicativos (portas 8501, 8502 e 8503)"
+echo "4) SAEV Leitura - Análise de Proficiência em Leitura (porta 8504)"
+echo "5) Todos os aplicativos (portas 8501, 8502, 8503 e 8504)"
 echo ""
 
-read -p "Digite sua escolha (1, 2, 3 ou 4): " choice
+read -p "Digite sua escolha (1, 2, 3, 4 ou 5): " choice
 
 # Pergunta sobre abertura automática do navegador
 echo ""
@@ -282,6 +283,11 @@ case $choice in
         APP_NAME="SAEV Rankings - Rankings e Classificações"
         ;;
     4)
+        APP_FILE="dashboard_leitura.py"
+        PORT=8504
+        APP_NAME="SAEV Leitura - Análise de Proficiência em Leitura"
+        ;;
+    5)
         print_info "Iniciando todos os aplicativos..."
         if [ -f "saev_streamlit.py" ]; then
             print_info "Iniciando SAEV Dashboard Geral em background (porta 8501)..."
@@ -301,6 +307,12 @@ case $choice in
             STREAMLIT3_PID=$!
             sleep 2
         fi
+        if [ -f "dashboard_leitura.py" ]; then
+            print_info "Iniciando SAEV Leitura em background (porta 8504)..."
+            nohup $PYTHON_CMD -m streamlit run dashboard_leitura.py --server.port=8504 --server.headless=true > streamlit4.log 2>&1 &
+            STREAMLIT4_PID=$!
+            sleep 2
+        fi
         
         echo ""
         print_status "Todos os aplicativos iniciados!"
@@ -308,14 +320,16 @@ case $choice in
         print_info "  SAEV Dashboard Geral: http://localhost:8501"
         print_info "  SAEV Dashboard Filtros: http://localhost:8502"
         print_info "  SAEV Rankings: http://localhost:8503"
+        print_info "  SAEV Análise de Leitura: http://localhost:8504"
         if [ "$LOCAL_IP" != "localhost" ]; then
             print_info "  SAEV Dashboard Geral (rede): http://$LOCAL_IP:8501"
             print_info "  SAEV Dashboard Filtros (rede): http://$LOCAL_IP:8502"
             print_info "  SAEV Rankings (rede): http://$LOCAL_IP:8503"
+            print_info "  SAEV Análise de Leitura (rede): http://$LOCAL_IP:8504"
         fi
         print_info ""
         print_info "Para parar os aplicativos, execute: pkill -f streamlit"
-        print_info "Logs: streamlit1.log, streamlit2.log e streamlit3.log"
+        print_info "Logs: streamlit1.log, streamlit2.log, streamlit3.log e streamlit4.log"
         echo ""
         
         # Abrir navegadores se solicitado
@@ -324,6 +338,7 @@ case $choice in
             (open_browser "http://localhost:8501" 3) &
             (open_browser "http://localhost:8502" 6) &
             (open_browser "http://localhost:8503" 9) &
+            (open_browser "http://localhost:8504" 12) &
             print_status "Navegadores sendo abertos em background"
         else
             print_info "🌐 Navegadores não serão abertos automaticamente"
@@ -331,6 +346,7 @@ case $choice in
             print_info "  SAEV Dashboard Geral: http://localhost:8501"
             print_info "  SAEV Dashboard Filtros: http://localhost:8502"
             print_info "  SAEV Rankings: http://localhost:8503"
+            print_info "  SAEV Análise de Leitura: http://localhost:8504"
         fi
         
         print_warning "Para parar todos os serviços: pkill -f streamlit"

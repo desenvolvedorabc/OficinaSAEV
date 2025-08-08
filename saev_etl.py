@@ -180,11 +180,26 @@ class SAEVETLFinal:
         );
         """)
 
-        # Popula dimensões (rápido)
+        # Popula dimensões (com tratamento inteligente de duplicatas)
         logger.info("📊 Populando dimensões...")
         conn.execute("""
-        INSERT INTO dim_aluno (ALU_ID, ALU_NOME, ALU_CPF)  
-        SELECT DISTINCT ALU_ID, ALU_NOME, ALU_CPF FROM avaliacao;
+        INSERT INTO dim_aluno (ALU_ID, ALU_NOME, ALU_CPF)
+        SELECT 
+            ALU_ID,
+            -- Prioriza nome não nulo e mais longo
+            FIRST(ALU_NOME ORDER BY 
+                CASE WHEN ALU_NOME IS NULL THEN 0 ELSE 1 END DESC,
+                LENGTH(ALU_NOME) DESC, 
+                ALU_NOME
+            ) AS ALU_NOME,
+            -- Prioriza CPF não nulo e mais longo
+            FIRST(ALU_CPF ORDER BY 
+                CASE WHEN ALU_CPF IS NULL THEN 0 ELSE 1 END DESC,
+                LENGTH(ALU_CPF) DESC, 
+                ALU_CPF
+            ) AS ALU_CPF
+        FROM avaliacao 
+        GROUP BY ALU_ID;
         """)
 
         conn.execute("""
@@ -194,8 +209,13 @@ class SAEVETLFinal:
 
         conn.execute("""
         INSERT INTO dim_descritor (MTI_CODIGO, MTI_DESCRITOR, QTD) 
-        SELECT MTI_CODIGO, MAX(MTI_DESCRITOR), COUNT(*) 
-        FROM avaliacao GROUP BY MTI_CODIGO;
+        SELECT 
+            COALESCE(MTI_CODIGO, 'SEM_DESCRITOR') as MTI_CODIGO,
+            COALESCE(MAX(MTI_DESCRITOR), 'Sem descritor específico') as MTI_DESCRITOR,
+            COUNT(*) as QTD
+        FROM avaliacao 
+        WHERE MTI_CODIGO IS NOT NULL OR DIS_NOME = 'Leitura'
+        GROUP BY COALESCE(MTI_CODIGO, 'SEM_DESCRITOR');
         """)
 
         # Cria tabela fato com otimização de memória
@@ -220,7 +240,10 @@ class SAEVETLFinal:
             TES_NOME VARCHAR(30),
             MTI_CODIGO VARCHAR(15),
             ACERTO INTEGER,
-            ERRO INTEGER
+            ERRO INTEGER,
+            -- Campos específicos para disciplina Leitura
+            NIVEL_LEITURA VARCHAR(15),
+            NIVEL_NUMERICO INTEGER
         );
         """)
         
@@ -232,8 +255,28 @@ class SAEVETLFinal:
             MUN_UF, MUN_NOME, ESC_INEP, SER_NUMBER, SER_NOME, 
             TUR_PERIODO, TUR_NOME, ALU_ID, AVA_NOME, AVA_ANO, 
             DIS_NOME, TES_NOME, MTI_CODIGO,
-            SUM(CASE WHEN ATR_CERTO = 1 THEN 1 ELSE 0 END) AS ACERTO,
-            SUM(CASE WHEN ATR_CERTO = 0 THEN 1 ELSE 0 END) AS ERRO
+            -- Para disciplinas tradicionais (Português/Matemática)
+            CASE WHEN DIS_NOME != 'Leitura' 
+                 THEN SUM(CASE WHEN ATR_CERTO = 1 THEN 1 ELSE 0 END) 
+                 ELSE 0 END AS ACERTO,
+            CASE WHEN DIS_NOME != 'Leitura' 
+                 THEN SUM(CASE WHEN ATR_CERTO = 0 THEN 1 ELSE 0 END) 
+                 ELSE 0 END AS ERRO,
+            -- Para disciplina Leitura
+            CASE WHEN DIS_NOME = 'Leitura' 
+                 THEN FIRST(ATR_RESPOSTA ORDER BY TEG_ORDEM) 
+                 ELSE NULL END AS NIVEL_LEITURA,
+            CASE WHEN DIS_NOME = 'Leitura' THEN
+                CASE FIRST(ATR_RESPOSTA ORDER BY TEG_ORDEM)
+                    WHEN 'nao_leitor' THEN 1
+                    WHEN 'silabas' THEN 2
+                    WHEN 'palavras' THEN 3
+                    WHEN 'frases' THEN 4
+                    WHEN 'nao_fluente' THEN 5
+                    WHEN 'fluente' THEN 6
+                    ELSE 0
+                END
+                ELSE NULL END AS NIVEL_NUMERICO
         FROM avaliacao
         GROUP BY MUN_UF, MUN_NOME, ESC_INEP, SER_NUMBER, SER_NOME, 
                  TUR_PERIODO, TUR_NOME, ALU_ID, AVA_NOME, AVA_ANO, 
