@@ -26,6 +26,8 @@ from utils_leitura import (
     NIVEIS_LEITURA,
     CORES_NIVEIS
 )
+from duckdb_manager import safe_get_dataframe, test_connection
+from duckdb_concurrent_solution import cached_query_safe, safe_dataframe
 
 # Configuração da página
 st.set_page_config(
@@ -37,13 +39,7 @@ st.set_page_config(
 
 @st.cache_data
 def carregar_dados_leitura():
-    """Carrega dados específicos da disciplina Leitura"""
-    db_path = Path("db/avaliacao_prod.duckdb")
-    if not db_path.exists():
-        st.error("❌ Banco de dados não encontrado! Execute o ETL primeiro.")
-        st.stop()
-    
-    conn = duckdb.connect(str(db_path))
+    """Carrega dados específicos da disciplina Leitura usando gerenciador concorrente"""
     
     query = """
     SELECT 
@@ -66,8 +62,12 @@ def carregar_dados_leitura():
     ORDER BY f.MUN_NOME, f.SER_NOME, f.ALU_ID
     """
     
-    df = conn.execute(query).df()
-    conn.close()
+    # Usar o gerenciador concorrente com cache
+    df = cached_query_safe(query)
+    
+    if df is None:
+        st.error("❌ Erro ao carregar dados de Leitura")
+        st.stop()
     
     # Adicionar descrições
     df['DESCRICAO_NIVEL'] = df['NIVEL_LEITURA'].apply(get_descricao_nivel_leitura)
