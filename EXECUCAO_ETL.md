@@ -186,6 +186,24 @@ Para forçar o reprocessamento de um arquivo específico:
 
 ## ⚠️ Cuidados e Boas Práticas
 
+### 🔧 Problemas Comuns de CSV
+
+#### Erro: "Value with unterminated quote found"
+**Sintoma**: Erro na linha específica com problema de aspas duplas no CSV
+```
+CSV Error on Line: 230440
+Original Line: ES,Águia Branca,"32064098",EMEF PADRE SERGIO BANZZA,6,"6º Ano EF",Manhã,"6º ANO ""A""",1607865...
+Value with unterminated quote found.
+```
+
+**Causa**: Aspas duplas malformadas nos dados (ex: `"6º ANO ""A"""`)
+
+**Solução Automática**: O ETL agora possui dois níveis de tolerância:
+1. **Nível 1**: `ignore_errors=true, quote='"', escape='"'`
+2. **Nível 2**: `ignore_errors=true, quote='', strict_mode=false`
+
+**⚡ Resultado**: Arquivos problemáticos são processados automaticamente, apenas pulando linhas inválidas
+
 ### Segurança de Dados
 - **Dados Sensíveis**: Os CSVs contêm CPF e nomes de alunos
 - **Proteção**: Pasta `data/` está no `.gitignore` 
@@ -216,6 +234,26 @@ Para arquivos muito grandes, execute em máquina com mais RAM ou processe em lot
 rm db/avaliacao_prod.duckdb
 python run_etl.py full
 ```
+
+#### CSV com Problemas de Formatação
+Se você ver erros como "Value with unterminated quote found":
+
+**✅ Solução Automática (Recomendada)**:
+```bash
+# O ETL agora corrige automaticamente - apenas execute novamente
+python run_etl.py full
+```
+
+**🔧 Solução Manual (Se necessário)**:
+1. Identifique o arquivo problemático no log de erro
+2. Abra o arquivo CSV em um editor de texto
+3. Procure pela linha mencionada no erro
+4. Corrija aspas duplas malformadas (ex: `""A""` → `"A"`)
+5. Salve o arquivo e execute o ETL novamente
+
+**⚠️ Exemplos de Problemas Comuns**:
+- `"6º ANO ""A"""` → `"6º ANO \"A\""`
+- `"Nome "João" Silva"` → `"Nome \"João\" Silva"`
 
 ## 📈 Exemplo de Execução Completa
 

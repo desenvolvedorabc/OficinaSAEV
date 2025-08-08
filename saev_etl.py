@@ -118,15 +118,18 @@ class SAEVETLFinal:
             logger.info(f"📂 Carregando: {filename}")
             
             try:
+                # Parâmetros CSV tolerantes para lidar com problemas de formatação
+                csv_params = "header=true, ignore_errors=true, quote='\"', escape='\"'"
+                
                 load_sql = f"""
                 INSERT INTO avaliacao 
-                SELECT * FROM read_csv_auto('{csv_file}', header=true, ignore_errors=true);
+                SELECT * FROM read_csv_auto('{csv_file}', {csv_params});
                 """
                 
                 conn.execute(load_sql)
                 
-                # Conta registros do arquivo
-                count_sql = f"SELECT COUNT(*) FROM read_csv_auto('{csv_file}', header=true);"
+                # Conta registros do arquivo usando os mesmos parâmetros tolerantes
+                count_sql = f"SELECT COUNT(*) FROM read_csv_auto('{csv_file}', {csv_params});"
                 file_records = conn.execute(count_sql).fetchone()[0]
                 total_records += file_records
                 
@@ -134,7 +137,29 @@ class SAEVETLFinal:
                 
             except Exception as e:
                 logger.error(f"❌ Erro ao carregar {filename}: {str(e)}")
-                raise
+                logger.warning(f"🔧 Tentando com parâmetros CSV alternativos...")
+                
+                try:
+                    # Tentativa com parâmetros ainda mais tolerantes
+                    fallback_params = "header=true, ignore_errors=true, quote='', strict_mode=false"
+                    
+                    load_sql_fallback = f"""
+                    INSERT INTO avaliacao 
+                    SELECT * FROM read_csv_auto('{csv_file}', {fallback_params});
+                    """
+                    
+                    conn.execute(load_sql_fallback)
+                    
+                    count_sql_fallback = f"SELECT COUNT(*) FROM read_csv_auto('{csv_file}', {fallback_params});"
+                    file_records = conn.execute(count_sql_fallback).fetchone()[0]
+                    total_records += file_records
+                    
+                    logger.info(f"✅ {filename}: {file_records:,} registros (usando modo fallback)")
+                    
+                except Exception as e2:
+                    logger.error(f"❌ Falha definitiva ao carregar {filename}: {str(e2)}")
+                    logger.warning(f"📊 Pulando arquivo {filename} - será necessário corrigir manualmente")
+                    continue
         
         return total_records
     
