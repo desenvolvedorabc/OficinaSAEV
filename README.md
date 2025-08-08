@@ -390,12 +390,34 @@ O sistema ETL processa arquivos CSV com dados de avaliações educacionais e os 
 # Ativar ambiente virtual
 source venv_saev/bin/activate
 
-# Carga completa (primeira vez)
-python run_etl.py full
+# Iniciar sistema (menu interativo)
+./start_saev_universal.sh
 
-# Carga incremental (apenas arquivos novos)
-python run_etl.py incremental
+# Opções disponíveis:
+# 1) Dashboard Geral (porta 8501)
+# 2) Dashboard com Filtros (porta 8502) 
+# 3) Rankings e Classificações (porta 8503)
+# 4) Análise de Leitura (porta 8504) ← NOVO!
+# 5) Todos os aplicativos (portas 8501-8504) ← ATUALIZADO!
 ```
+
+### 📊 **Dashboards Disponíveis**
+
+| **Opção** | **Dashboard** | **Porta** | **Funcionalidade** |
+|-----------|---------------|-----------|-------------------|
+| **1** | Dashboard Geral | 8501 | Visão geral, análises por município/escola |
+| **2** | Dashboard Filtros | 8502 | Filtros avançados, análises detalhadas |
+| **3** | Rankings | 8503 | Top alunos, escolas, classificações |
+| **4** | **Análise Leitura** | **8504** | **Proficiência em leitura (níveis 1-6)** |
+| **5** | **Todos** | **8501-8504** | **Inicia todos simultaneamente** |
+
+### 🎯 **Disciplina Leitura - Funcionalidades Especiais**
+
+- **📚 Métricas Específicas**: Baseadas em proficiência, não acerto/erro
+- **📊 6 Níveis de Proficiência**: Não leitor → Fluente
+- **📈 Visualizações Exclusivas**: Distribuições, rankings por nível
+- **🔍 Análises Detalhadas**: Por município, escola, série
+- **📋 Dashboard Dedicado**: http://localhost:8504
 
 ### 📖 **Documentação Completa**
 
